@@ -1,0 +1,6 @@
+@WGMansion.Api_HostAddress = http://localhost:5258
+
+GET {{WGMansion.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
