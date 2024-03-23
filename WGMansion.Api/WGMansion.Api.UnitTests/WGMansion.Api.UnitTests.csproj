@@ -26,8 +26,4 @@
     <ProjectReference Include="..\WGMansion.Api\WGMansion.Api.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Utilities\" />
-  </ItemGroup>
-
 </Project>
