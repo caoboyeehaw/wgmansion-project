@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WGMansion.Api", "WGMansion.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WGMansion.Api.UnitTests", "..\WGMansion.Api.UnitTests\WGMansion.Api.UnitTests.csproj", "{FB56462F-0B43-4A80-A53A-5808DC8FEFE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WGMansion.MongoDB", "..\WGMansion.MongoDB\WGMansion.MongoDB.csproj", "{AD6DF89C-94CA-448E-BFF1-D276C91A0A47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{FB56462F-0B43-4A80-A53A-5808DC8FEFE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB56462F-0B43-4A80-A53A-5808DC8FEFE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB56462F-0B43-4A80-A53A-5808DC8FEFE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD6DF89C-94CA-448E-BFF1-D276C91A0A47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD6DF89C-94CA-448E-BFF1-D276C91A0A47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD6DF89C-94CA-448E-BFF1-D276C91A0A47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD6DF89C-94CA-448E-BFF1-D276C91A0A47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
