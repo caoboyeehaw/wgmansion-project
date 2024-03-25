@@ -28,8 +28,8 @@ namespace WGMansion.Api.UnitTests.Controllers
         public async Task TestAuthenticate()
         {
             var account = new Account();
-            _accountsViewModel.Setup(x=>x.Authenticate(account)).ReturnsAsync(account);
-            var result = await _sut.Authenticate(account);
+            _accountsViewModel.Setup(x=>x.Authenticate("username", "password")).ReturnsAsync(account);
+            var result = await _sut.Authenticate("username", "password");
             var okResult = result.Result as OkObjectResult;
 
             Assert.That(result != null);
@@ -40,8 +40,8 @@ namespace WGMansion.Api.UnitTests.Controllers
         public async Task TestAuthenticateBadResult()
         {
             var account = new Account();
-            _accountsViewModel.Setup(x => x.Authenticate(account)).ThrowsAsync(new Exception());
-            var result = await _sut.Authenticate(account);
+            _accountsViewModel.Setup(x => x.Authenticate("username", "password")).ThrowsAsync(new Exception());
+            var result = await _sut.Authenticate("username", "password");
             var badResult = result.Result as BadRequestObjectResult;
 
             Assert.That(result != null);
@@ -53,8 +53,8 @@ namespace WGMansion.Api.UnitTests.Controllers
         public async Task TestCreateUser()
         {
             var account = new Account();
-            _accountsViewModel.Setup(x => x.CreateAccount(account)).ReturnsAsync(account);
-            var result = await _sut.CreateUser(account);
+            _accountsViewModel.Setup(x => x.CreateAccount("username", "password")).ReturnsAsync(account);
+            var result = await _sut.CreateUser("username", "password");
             var okResult = result.Result as OkObjectResult;
 
             Assert.That(result != null);
@@ -65,8 +65,8 @@ namespace WGMansion.Api.UnitTests.Controllers
         public async Task TestCreateUserBadResult()
         {
             var account = new Account();
-            _accountsViewModel.Setup(x => x.CreateAccount(account)).ThrowsAsync(new Exception());
-            var result = await _sut.CreateUser(account);
+            _accountsViewModel.Setup(x => x.CreateAccount("username", "password")).ThrowsAsync(new Exception());
+            var result = await _sut.CreateUser("username", "password");
             var badResult = result.Result as BadRequestObjectResult;
 
             Assert.That(result != null);

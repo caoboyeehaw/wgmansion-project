@@ -35,7 +35,7 @@ namespace WGMansion.Api.UnitTests.Utilities
         {
             var account = new Account
             {
-                Id = new ObjectId(),
+                Id = "123",
                 Role = "Admin"
             };
 

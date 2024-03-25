@@ -10,5 +10,7 @@ namespace WGMansion.Api.Models.Ticker
         public float AveragePrice { get; set; }
         [BsonElement("quantity")]
         public int Quantity { get; set; }
+        [BsonElement("orders")]
+        public List<string> Orders { get; set; } = new List<string>();
     }
 }

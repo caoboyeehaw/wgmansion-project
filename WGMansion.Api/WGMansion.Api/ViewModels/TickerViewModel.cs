@@ -1,4 +1,5 @@
-﻿using WGMansion.Api.Models.Stocks;
+﻿using log4net;
+using WGMansion.Api.Models.Stocks;
 using WGMansion.Api.Models.Ticker;
 using WGMansion.MongoDB.Services;
 
@@ -13,6 +14,7 @@ namespace WGMansion.Api.ViewModels
 
     public class TickerViewModel : ITickerViewModel
     {
+        private readonly ILog _logger = LogManager.GetLogger(typeof(TickerViewModel));
         private readonly IMongoService<Ticker> _mongoService;
         private const string TICKERS_COLLECTION = "tickers";
         private const string TICKER_TYPE = "ticker";
