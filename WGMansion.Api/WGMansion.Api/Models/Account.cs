@@ -10,7 +10,9 @@ namespace WGMansion.Api.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
         [BsonElement("type")]
-        public string Type { get; set; }
+        public string Type { get; set; } = "account";
+        [BsonElement("active")]
+        public bool Active { get; set; }
         [BsonElement("username")]
         public string UserName { get; set; }
         [BsonElement("password")]

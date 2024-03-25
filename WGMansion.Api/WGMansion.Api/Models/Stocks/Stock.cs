@@ -1,17 +1,14 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
-using WGMansion.MongoDB.Models;
 
-namespace WGMansion.Api.Models.Stocks
+namespace WGMansion.Api.Models.Ticker
 {
-    public class Stock : IDocument
+    public class Stock
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId Id { get; set; }
-        [BsonElement("type")]
-        public string Type { get; set; }
-        [BsonElement("ticker")]
+        [BsonElement("symbol")]
         public string Symbol { get; set; }
+        [BsonElement("averageprice")]
+        public float AveragePrice { get; set; }
+        [BsonElement("quantity")]
+        public int Quantity { get; set; }
     }
 }

@@ -15,19 +15,20 @@ namespace WGMansion.Api.UnitTests.Controllers
     internal class AccountsControllerTests
     {
         private AccountsController _sut;
-        private Mock<IAccountsViewModel> _viewModel = new Mock<IAccountsViewModel>();
+        private Mock<IAccountsViewModel> _accountsViewModel;
 
         [SetUp]
         public void Setup()
         {
-            _sut = new AccountsController(_viewModel.Object);
+            _accountsViewModel = new Mock<IAccountsViewModel>();
+            _sut = new AccountsController(_accountsViewModel.Object);
         }
 
         [Test]
         public async Task TestAuthenticate()
         {
             var account = new Account();
-            _viewModel.Setup(x=>x.Authenticate(account)).ReturnsAsync(account);
+            _accountsViewModel.Setup(x=>x.Authenticate(account)).ReturnsAsync(account);
             var result = await _sut.Authenticate(account);
             var okResult = result.Result as OkObjectResult;
 
@@ -39,7 +40,7 @@ namespace WGMansion.Api.UnitTests.Controllers
         public async Task TestAuthenticateBadResult()
         {
             var account = new Account();
-            _viewModel.Setup(x => x.Authenticate(account)).ThrowsAsync(new Exception());
+            _accountsViewModel.Setup(x => x.Authenticate(account)).ThrowsAsync(new Exception());
             var result = await _sut.Authenticate(account);
             var badResult = result.Result as BadRequestObjectResult;
 
@@ -52,7 +53,7 @@ namespace WGMansion.Api.UnitTests.Controllers
         public async Task TestCreateUser()
         {
             var account = new Account();
-            _viewModel.Setup(x => x.CreateAccount(account)).ReturnsAsync(account);
+            _accountsViewModel.Setup(x => x.CreateAccount(account)).ReturnsAsync(account);
             var result = await _sut.CreateUser(account);
             var okResult = result.Result as OkObjectResult;
 
@@ -64,7 +65,7 @@ namespace WGMansion.Api.UnitTests.Controllers
         public async Task TestCreateUserBadResult()
         {
             var account = new Account();
-            _viewModel.Setup(x => x.CreateAccount(account)).ThrowsAsync(new Exception());
+            _accountsViewModel.Setup(x => x.CreateAccount(account)).ThrowsAsync(new Exception());
             var result = await _sut.CreateUser(account);
             var badResult = result.Result as BadRequestObjectResult;
 

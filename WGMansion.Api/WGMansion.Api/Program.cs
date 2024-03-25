@@ -51,15 +51,16 @@ internal class Program
                             Id="Bearer"
                         }
                     },
-                    new string []{ }
+                    Array.Empty<string>()
                 }
             });
         });
 
-        builder.Services.AddScoped(typeof(IMongoService<>), typeof(MongoService<>));
+        builder.Services.AddSingleton(typeof(IMongoService<>), typeof(MongoService<>));
         builder.Services.AddTransient<ITokenGenerator, TokenGenerator>();
         builder.Services.AddTransient<IAccountsViewModel, AccountsViewModel>();
-        builder.Services.AddTransient<IStocksViewModel, StocksViewModel>();
+        builder.Services.AddTransient<ITickerViewModel, TickerViewModel>();
+        builder.Services.AddTransient<ITickerHistoryViewModel, TickerHistoryViewModel>();
 
         builder.Configuration.AddUserSecrets<MongoSettings>();
         builder.Configuration.AddUserSecrets<AppSettings>();

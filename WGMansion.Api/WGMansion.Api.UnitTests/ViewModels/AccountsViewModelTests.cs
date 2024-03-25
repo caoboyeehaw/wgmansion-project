@@ -19,12 +19,15 @@ namespace WGMansion.Api.UnitTests.ViewModels
     internal class AccountsViewModelTests
     {
         private AccountsViewModel _sut;
-        private Mock<IMongoService<Account>> _mongoService = new Mock<IMongoService<Account>>();
-        private Mock<ITokenGenerator> _tokenGenerator = new Mock<ITokenGenerator>();
+        private Mock<IMongoService<Account>> _mongoService;
+        private Mock<ITokenGenerator> _tokenGenerator;
 
         [SetUp]
         public void Setup()
         {
+            _mongoService = new Mock<IMongoService<Account>>();
+            _tokenGenerator = new Mock<ITokenGenerator>();
+
             _tokenGenerator.Setup(x => x.GetToken(It.IsAny<Account>())).Returns("new token");
             _sut = new AccountsViewModel(_mongoService.Object, _tokenGenerator.Object);
         }

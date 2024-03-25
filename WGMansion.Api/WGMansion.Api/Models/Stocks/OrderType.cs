@@ -1,4 +1,4 @@
-﻿namespace WGMansion.Api.Models.Stocks
+﻿namespace WGMansion.Api.Models.Ticker
 {
     public enum OrderType
     {
@@ -6,6 +6,5 @@
         LimitBuy,
         MarketSell,
         LimitSell
-        
     }
 }
