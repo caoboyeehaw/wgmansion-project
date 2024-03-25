@@ -17,8 +17,9 @@ namespace WGMansion.Api.Models
         public string Password { get; set; }
         [BsonElement("email")]
         public string Email { get; set; }
-        [BsonElement("userRole")]
-        public string UserRole { get; set; }
+        [BsonElement("role")]
+        public string Role { get; set; }
+        [BsonIgnore]
         public string Token { get; set; }
     }
 }

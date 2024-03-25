@@ -23,7 +23,8 @@ namespace WGMansion.Api.ViewModels
     {
         private readonly IMongoService<Account> _mongoService;
         private readonly ITokenGenerator _tokenGenerator;
-        private const string TypeValue = "User";
+        private const string TYPE_VALUE = "User";
+        private const string ACCOUNTS_COLLECTION = "accounts";
         private ILog _logger = LogManager.GetLogger(typeof(AccountsViewModel));
 
         public AccountsViewModel(IMongoService<Account> mongoService, ITokenGenerator tokenGenerator)
@@ -34,7 +35,7 @@ namespace WGMansion.Api.ViewModels
 
         public async Task<Account> Authenticate(Account authUser)
         {
-            _mongoService.SetCollection("accounts");
+            _mongoService.SetCollection(ACCOUNTS_COLLECTION);
             var user = (await _mongoService.FindOneAsync(x => x.UserName == authUser.UserName));
 
             if (user == null)
@@ -52,12 +53,12 @@ namespace WGMansion.Api.ViewModels
             var newUser = new Account
             {
                 UserName = account.UserName,
-                Type = TypeValue,
+                Type = TYPE_VALUE,
                 Password = EncryptionService.HashPassword(account.Password),
-                UserRole = "User",
+                Role = "User",
             };
 
-            _mongoService.SetCollection("accounts");
+            _mongoService.SetCollection(ACCOUNTS_COLLECTION);
             var findUser = _mongoService.FilterBy(x => x.UserName == newUser.UserName).ToList();
             if (findUser.Count > 0)
             {
