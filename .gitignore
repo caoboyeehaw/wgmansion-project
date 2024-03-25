@@ -433,3 +433,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Secrets
+secrets.json
