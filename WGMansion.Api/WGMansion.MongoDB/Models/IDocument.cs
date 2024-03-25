@@ -10,5 +10,7 @@ namespace WGMansion.MongoDB.Models
         ObjectId Id { get; set; }
         [BsonElement("type")]
         string Type { get; set; }
+        [BsonElement("active")]
+        public bool Active { get; set; }
     }
 }

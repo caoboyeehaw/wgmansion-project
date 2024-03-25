@@ -14,11 +14,12 @@ namespace WGMansion.Api.UnitTests.Utilities
     internal class TokenGeneratorTests
     {
         private TokenGenerator _sut;
-        private Mock<IOptions<AppSettings>> _appSettings = new Mock<IOptions<AppSettings>>();
+        private Mock<IOptions<AppSettings>> _appSettings;
 
         [SetUp]
         public void Setup()
         {
+            _appSettings = new Mock<IOptions<AppSettings>>();
             var appSettings = new AppSettings
             {
                 Secret = "secret secret secret secret secret secret secret secret secret secret "
@@ -35,7 +36,7 @@ namespace WGMansion.Api.UnitTests.Utilities
             var account = new Account
             {
                 Id = new ObjectId(),
-                UserRole = "Admin"
+                Role = "Admin"
             };
 
             var result = _sut.GetToken(account);
