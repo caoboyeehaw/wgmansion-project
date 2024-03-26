@@ -1,6 +1,5 @@
 ﻿using log4net;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using WGMansion.Api.ViewModels;
 
 namespace WGMansion.Api.Controllers
@@ -11,12 +10,13 @@ namespace WGMansion.Api.Controllers
     {
         private ILog _logger = LogManager.GetLogger(typeof(HealthcheckController));
         private readonly IHealthcheckViewModel _healthcheckViewModel;
-        public HealthcheckController(IHealthcheckViewModel healthcheckViewModel) 
-        { 
+        public HealthcheckController(IHealthcheckViewModel healthcheckViewModel)
+        {
             _healthcheckViewModel = healthcheckViewModel;
         }
 
         [HttpGet]
+        [Route("/healthcheck")]
         public ActionResult<string> Healthcheck()
         {
             try
@@ -25,11 +25,17 @@ namespace WGMansion.Api.Controllers
                 var result = _healthcheckViewModel.Ping().ToString();
                 return Ok(result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.Error(e.ToString());
                 return BadRequest(e.ToString());
             }
+        }
+        [HttpGet]
+        [Route("/test")]
+        public ActionResult<string> Test()
+        {
+            return Ok("Ok");
         }
     }
 }

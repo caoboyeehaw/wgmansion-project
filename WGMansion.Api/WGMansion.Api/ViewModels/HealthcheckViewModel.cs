@@ -10,7 +10,7 @@ namespace WGMansion.Api.ViewModels
     public class HealthcheckViewModel : IHealthcheckViewModel
     {
         private readonly IMongoService<Account> _mongoService;
-        public HealthcheckViewModel(IMongoService<Account> mongoService) 
+        public HealthcheckViewModel(IMongoService<Account> mongoService)
         {
             _mongoService = mongoService;
         }

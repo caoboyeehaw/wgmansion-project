@@ -217,8 +217,8 @@ namespace WGMansion.Api.UnitTests.ViewModels
             Assert.That(ticker.SellOrders.Count, Is.EqualTo(1));
             Assert.That(ticker.SellOrders.First().Quantity, Is.EqualTo(75));
             Assert.That(ticker.BuyOrders.First().Quantity, Is.EqualTo(50));
-            Assert.That(account.Portfolio.Money, Is.EqualTo(7500));
-            Assert.That(sellerAccount.Portfolio.Money, Is.EqualTo(-7500));
+            Assert.That(account.Portfolio.Money, Is.EqualTo(-5000));
+            Assert.That(sellerAccount.Portfolio.Money, Is.EqualTo(5000));
             Assert.That(account.Portfolio.Stocks.Any(x => x.Symbol == "ABC"));
             Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.EqualTo(1));
             Assert.That(sellerAccount.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.EqualTo(1));

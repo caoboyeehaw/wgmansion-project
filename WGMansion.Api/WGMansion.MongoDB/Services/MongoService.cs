@@ -1,7 +1,6 @@
 ﻿using log4net;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using MongoDB.Driver.Core.Clusters;
 using MongoDB.Driver.Core.Servers;
 using System.Linq.Expressions;
 using WGMansion.MongoDB.Models;
@@ -28,7 +27,7 @@ namespace WGMansion.MongoDB.Services
 
         public int Ping()
         {
-            return _client.Cluster.Description.Servers.Count(x=>x.State == ServerState.Connected);
+            return _client.Cluster.Description.Servers.Count(x => x.State == ServerState.Connected);
         }
 
         public void SetCollection(string collection)

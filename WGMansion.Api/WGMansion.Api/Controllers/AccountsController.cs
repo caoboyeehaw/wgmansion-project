@@ -20,7 +20,8 @@ namespace WGMansion.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
+        [HttpPost]
+        [Route("/authenticate")]
         public async Task<ActionResult<Account>> Authenticate(string username, string password)
         {
             try
@@ -38,6 +39,7 @@ namespace WGMansion.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost]
+        [Route("/createuser")]
         public async Task<ActionResult<Account>> CreateUser(string username, string password)
         {
             try
