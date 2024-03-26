@@ -14,8 +14,12 @@ pnpm dev
 bun dev
 ```
 
-frontend dependencies temp
+frontend dependencies notes:
 - shadcn
 - tailwindcss
 - recharts
 - radix ui
+
+conisderations:
+- might consider aceternity ui for some fancy fx, and radix icons for more use of icons.
+- future plans include designing custom modals using shadcn component ~ component art i guess?? 
