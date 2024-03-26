@@ -15,14 +15,7 @@ import {
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
 
-  import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-  } from "@/components/ui/sheet"
+
 
   export function UserNav() {
     return (
@@ -40,7 +33,7 @@ import {
             <div className="flex flex-col space-y-1">
               <p className="text-sm font-medium leading-none">shadcn</p>
               <p className="text-xs leading-none text-muted-foreground">
-                m@example.com
+                user@example.com
               </p>
             </div>
           </DropdownMenuLabel>
@@ -48,22 +41,26 @@ import {
           <DropdownMenuGroup>
             <DropdownMenuItem>
               Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              <DropdownMenuShortcut></DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem>
               Billing
-              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+              <DropdownMenuShortcut></DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem>
               Settings
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+              <DropdownMenuShortcut></DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              Themes
+              <DropdownMenuShortcut></DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem>New Team</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             Log out
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+            <DropdownMenuShortcut></DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

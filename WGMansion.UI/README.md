@@ -14,6 +14,16 @@ pnpm dev
 bun dev
 ```
 
+https://www.radix-ui.com/icons
+https://ui.shadcn.com/
+
+current ui dashboard modeled after: 
+https://github.com/shadcn-ui/ui/blob/main/apps/www/app/(app)/examples/dashboard/components/user-nav.tsx
+
+landing page will look like: 
+https://openai.com/blog/superalignment-fast-grants
+
+
 frontend dependencies notes:
 - shadcn
 - tailwindcss
@@ -22,4 +32,4 @@ frontend dependencies notes:
 
 conisderations:
 - might consider aceternity ui for some fancy fx, and radix icons for more use of icons.
-- future plans include designing custom modals using shadcn component ~ component art i guess?? 
+- future plans include designing custom modals using shadcn component ~ component art i guess??
