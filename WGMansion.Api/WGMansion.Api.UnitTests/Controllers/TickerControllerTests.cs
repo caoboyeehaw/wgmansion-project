@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver.Search;
 using Moq;
 using System;
@@ -41,8 +42,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.GetTicker(ticker.Symbol);
             var okResult = result.Result as OkObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(okResult?.StatusCode == 200);
+            Assert.That(result,Is.Not.Null);
+            Assert.That(okResult?.StatusCode, Is.EqualTo(200));
         }
 
         [Test]
@@ -58,8 +59,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.GetTicker(ticker.Symbol);
             var badResult = result.Result as BadRequestObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(badResult?.StatusCode == 400);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(badResult?.StatusCode, Is.EqualTo(400));
         }
 
 
@@ -75,8 +76,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.GetTicker(ticker.Symbol);
             var badResult = result.Result as BadRequestObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(badResult?.StatusCode == 400);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(badResult?.StatusCode, Is.EqualTo(400));
         }
 
         [Test]
@@ -87,8 +88,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.GetAllTickers();
             var okResult = result.Result as OkObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(okResult?.StatusCode == 200);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(okResult?.StatusCode, Is.EqualTo(200));
         }
 
         [Test]
@@ -99,8 +100,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.GetAllTickers();
             var badResult = result.Result as BadRequestObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(badResult?.StatusCode == 400);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(badResult?.StatusCode, Is.EqualTo(400));
         }
 
         [Test]
@@ -112,8 +113,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             _tickerHistoryViewModel.Verify(x => x.CreateTickerHistory("TEST"), Times.Once);
             var okResult = result.Result as OkObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(okResult?.StatusCode == 200);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(okResult?.StatusCode, Is.EqualTo(200));
         }
 
         [Test]
@@ -128,8 +129,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.GetTicker(ticker.Symbol);
             var badResult = result.Result as BadRequestObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(badResult?.StatusCode == 400);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(badResult?.StatusCode, Is.EqualTo(400));
         }
 
         [Test]
@@ -139,8 +140,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.GetTickerOrderHistory("TEST",0,10);
             var okResult = result.Result as OkObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(okResult?.StatusCode == 200);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(okResult?.StatusCode, Is.EqualTo(200));
         }
 
         [Test]
@@ -150,8 +151,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.GetTickerOrderHistory("TEST", 0, 10);
             var badResult = result.Result as BadRequestObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(badResult?.StatusCode == 400);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(badResult?.StatusCode, Is.EqualTo(400));
         }
 
         [Test]
@@ -163,8 +164,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.AddOrderToHistory(order);
             var okResult = result.Result as OkObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(okResult?.StatusCode == 200);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(okResult?.StatusCode, Is.EqualTo(200));
         }
 
         [Test]
@@ -175,8 +176,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.AddOrderToHistory(order);
             var badResult = result.Result as BadRequestObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(badResult?.StatusCode == 400);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(badResult?.StatusCode, Is.EqualTo(400));
         }
     }
 }

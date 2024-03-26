@@ -118,7 +118,7 @@ namespace WGMansion.Api.UnitTests.ViewModels
                 Password = "password"
             };
 
-            _mongoService.Setup(x => x.FilterBy(It.IsAny<Expression<Func<Account,bool>>>())).Returns(new List<Account> { newUser });
+            _mongoService.Setup(x => x.FilterByAsync(It.IsAny<Expression<Func<Account,bool>>>())).ReturnsAsync(new List<Account> { newUser });
 
             var result = Assert.ThrowsAsync<Exception>(async () => await _sut.CreateAccount("username", "password"));
             Assert.That(result.Message, Is.EqualTo($"User already exists : {newUser.UserName}"));

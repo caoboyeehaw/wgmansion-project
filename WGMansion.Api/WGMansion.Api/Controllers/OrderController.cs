@@ -16,9 +16,12 @@ namespace WGMansion.Api.Controllers
         private readonly ILog _logger = LogManager.GetLogger(typeof(OrderController));
         private readonly IOrderViewModel _orderViewModel;
 
+        public Func<string> GetUserId;
+
         public OrderController(IOrderViewModel orderViewModel)
         {
             _orderViewModel = orderViewModel;
+            GetUserId = () => User.Identity.Name;
         }
 
         [HttpPost]
@@ -28,7 +31,7 @@ namespace WGMansion.Api.Controllers
             try
             {
                 _logger.Info($"Adding order: {order.Symbol} {order.OrderType} ${order.Price} #{order.Quantity}");
-                var result = await _orderViewModel.AddOrder(order, User.Identity.Name);
+                var result = await _orderViewModel.AddOrder(order, GetUserId());
                 return Ok(result);
             }
             catch(Exception e)
@@ -45,7 +48,7 @@ namespace WGMansion.Api.Controllers
             try
             {
                 _logger.Info($"Withdrawing order {orderId}");
-                await _orderViewModel.WithdrawOrder(orderId, tickerSymbol, User.Identity.Name);
+                await _orderViewModel.WithdrawOrder(orderId, tickerSymbol, GetUserId());
                 return Ok(true);
             }
             catch(Exception e)

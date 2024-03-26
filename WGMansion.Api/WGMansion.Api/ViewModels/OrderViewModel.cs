@@ -37,7 +37,7 @@ namespace WGMansion.Api.ViewModels
             if (ticker == null) throw new Exception($"Ticker {order.Symbol} not found");
 
             AddOrderToStock(order, account);
-            AddOrderToTicker(order, ticker);
+            ProcessOrderOnTicker(order, ticker);
 
             await _tickerViewModel.UpdateTicker(ticker);
             await _accountsViewModel.UpdateAccount(account);
@@ -65,7 +65,7 @@ namespace WGMansion.Api.ViewModels
             return newStock;
         }
 
-        private async void AddOrderToTicker(Order order, Ticker ticker)
+        private async void ProcessOrderOnTicker(Order order, Ticker ticker)
         {
             switch (order.OrderType)
             {
@@ -100,6 +100,7 @@ namespace WGMansion.Api.ViewModels
             while(sellOrders.Count > 0 && buyOrder.Quantity > 0)
             {
                 await FulfillOrder(buyOrder, sellOrders[0], ticker, accountsToUpdate);
+                sellOrders.RemoveAll(x => x.Quantity == 0);
             }
             await UpdateAllAccounts(accountsToUpdate);
         }
@@ -109,16 +110,18 @@ namespace WGMansion.Api.ViewModels
             var accountsToUpdate = new List<Account>();
             while(buyOrders.Count > 0 && sellOrder.Quantity > 0)
             {
+                sellOrder.Price = buyOrders[0].Price;
                 await FulfillOrder(buyOrders[0],sellOrder, ticker, accountsToUpdate);
+                buyOrders.RemoveAll(x => x.Quantity == 0);
             }
             await UpdateAllAccounts(accountsToUpdate);
         }
 
         private async Task UpdateAllAccounts(List<Account> accountsToUpdate)
         {
-            foreach (var item in accountsToUpdate.Distinct())
+            foreach (var account in accountsToUpdate.Distinct())
             {
-                await _accountsViewModel.UpdateAccount(item);
+                await _accountsViewModel.UpdateAccount(account);
             }
         }
 

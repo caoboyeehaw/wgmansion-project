@@ -32,8 +32,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.Authenticate("username", "password");
             var okResult = result.Result as OkObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(okResult?.StatusCode == 200);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(okResult?.StatusCode, Is.EqualTo(200));
         }
 
         [Test]
@@ -44,9 +44,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.Authenticate("username", "password");
             var badResult = result.Result as BadRequestObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(badResult?.StatusCode == 400);
-
+            Assert.That(result, Is.Not.Null);
+            Assert.That(badResult?.StatusCode, Is.EqualTo(400));
         }
 
         [Test]
@@ -57,8 +56,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.CreateUser("username", "password");
             var okResult = result.Result as OkObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(okResult?.StatusCode == 200);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(okResult?.StatusCode, Is.EqualTo(200));
         }
 
         [Test]
@@ -69,9 +68,8 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.CreateUser("username", "password");
             var badResult = result.Result as BadRequestObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(badResult?.StatusCode == 400);
-
+            Assert.That(result, Is.Not.Null);
+            Assert.That(badResult?.StatusCode, Is.EqualTo(400));
         }
     }
 }
