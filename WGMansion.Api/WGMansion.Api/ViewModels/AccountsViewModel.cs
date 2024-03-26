@@ -17,6 +17,8 @@ namespace WGMansion.Api.ViewModels
     {
         Task<Account> Authenticate(string username, string password);
         Task<Account> CreateAccount(string username, string password);
+        Task<Account> GetAccount(string id);
+        Task<Account> UpdateAccount(Account account);
     }
 
     public class AccountsViewModel : IAccountsViewModel
@@ -59,7 +61,7 @@ namespace WGMansion.Api.ViewModels
             };
 
             _mongoService.SetCollection(ACCOUNTS_COLLECTION);
-            var findUser = _mongoService.FilterBy(x => x.UserName == username).ToList();
+            var findUser = (await _mongoService.FilterByAsync(x => x.UserName == username)).ToList();
             if (findUser.Count > 0)
             {
                 throw new Exception($"User already exists : {username}");
@@ -68,6 +70,20 @@ namespace WGMansion.Api.ViewModels
             _logger.Info($"Created new user {username}");
             newUser.Password = null;
             return newUser;
+        }
+
+        public async Task<Account> GetAccount(string id)
+        {
+            _mongoService.SetCollection(ACCOUNTS_COLLECTION);
+            var user = await _mongoService.FindByIdAsync(id);
+            return user;
+        }
+
+        public async Task<Account> UpdateAccount(Account account)
+        {
+            _mongoService.SetCollection(ACCOUNTS_COLLECTION);
+            await _mongoService.ReplaceOneAsync(account);
+            return account;
         }
     }
 }

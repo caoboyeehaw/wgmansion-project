@@ -61,6 +61,7 @@ internal class Program
         builder.Services.AddTransient<IAccountsViewModel, AccountsViewModel>();
         builder.Services.AddTransient<ITickerViewModel, TickerViewModel>();
         builder.Services.AddTransient<ITickerHistoryViewModel, TickerHistoryViewModel>();
+        builder.Services.AddTransient<IOrderViewModel, OrderViewModel>();
 
         builder.Configuration.AddUserSecrets<MongoSettings>();
         builder.Configuration.AddUserSecrets<AppSettings>();

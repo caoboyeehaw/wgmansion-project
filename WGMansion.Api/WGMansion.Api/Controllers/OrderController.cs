@@ -1,6 +1,7 @@
 ﻿using log4net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WGMansion.Api.Models;
 using WGMansion.Api.Models.Ticker;
 using WGMansion.Api.ViewModels;
@@ -26,7 +27,26 @@ namespace WGMansion.Api.Controllers
         {
             try
             {
+                _logger.Info($"Adding order: {order.Symbol} {order.OrderType} ${order.Price} #{order.Quantity}");
+                var result = await _orderViewModel.AddOrder(order, User.Identity.Name);
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                _logger.Error(e.ToString());
+                return BadRequest(e.ToString());
+            }
+        }
 
+        [HttpDelete]
+        [Route("/withdrawOrder")]
+        public async Task<ActionResult<bool>> WithdrawOrder(string orderId, string tickerSymbol)
+        {
+            try
+            {
+                _logger.Info($"Withdrawing order {orderId}");
+                await _orderViewModel.WithdrawOrder(orderId, tickerSymbol, User.Identity.Name);
+                return Ok(true);
             }
             catch(Exception e)
             {

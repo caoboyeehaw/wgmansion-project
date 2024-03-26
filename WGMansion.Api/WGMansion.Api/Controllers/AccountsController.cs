@@ -6,7 +6,7 @@ using WGMansion.Api.ViewModels;
 
 namespace WGMansion.Api.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = Roles.User)]
     [Route("v1/[controller]")]
     [ApiController]
     public class AccountsController : ControllerBase

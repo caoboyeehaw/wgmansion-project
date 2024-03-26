@@ -10,6 +10,7 @@ namespace WGMansion.Api.ViewModels
         Task<Ticker> GetTicker(string symbol);
         Task<List<Ticker>> GetAllTickers();
         Task<Ticker> CreateTicker(string symbol);
+        Task<Ticker> UpdateTicker(Ticker ticker);
     }
 
     public class TickerViewModel : ITickerViewModel
@@ -48,6 +49,13 @@ namespace WGMansion.Api.ViewModels
             var ticker = new Ticker { Symbol = symbol };
 
             await _mongoService.InsertOneAsync(ticker);
+            return ticker;
+        }
+
+        public async Task<Ticker> UpdateTicker(Ticker ticker)
+        {
+            _mongoService.SetCollection(TICKERS_COLLECTION);
+            await _mongoService.ReplaceOneAsync(ticker);
             return ticker;
         }
     }

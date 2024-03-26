@@ -24,5 +24,7 @@ namespace WGMansion.Api.Models.Ticker
         public float Price { get; set; }
         [BsonElement("quantity")]
         public int Quantity { get; set; }
+        [BsonElement("maxQuantity")]
+        public int MaxQuantity { get; set; }
     }
 }
