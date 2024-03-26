@@ -1,5 +1,4 @@
 ﻿using log4net;
-using WGMansion.Api.Models.Stocks;
 using WGMansion.Api.Models.Ticker;
 using WGMansion.MongoDB.Services;
 

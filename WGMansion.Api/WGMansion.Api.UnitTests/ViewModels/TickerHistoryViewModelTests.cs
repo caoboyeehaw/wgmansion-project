@@ -1,10 +1,5 @@
 ﻿using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using WGMansion.Api.Models.Stocks;
 using WGMansion.Api.Models.Ticker;
 using WGMansion.Api.ViewModels;
@@ -50,11 +45,11 @@ namespace WGMansion.Api.UnitTests.ViewModels
                     new Order(),
                 }
             };
-            _mongoService.Setup(x=> x.FindOneAsync(It.IsAny<Expression<Func<TickerHistory, bool>>>())).ReturnsAsync(history);
+            _mongoService.Setup(x => x.FindOneAsync(It.IsAny<Expression<Func<TickerHistory, bool>>>())).ReturnsAsync(history);
 
             var result = await _sut.GetTickerHistory("TEST", 0, 4);
 
-            Assert.That(result,Is.Not.Null);
+            Assert.That(result, Is.Not.Null);
             Assert.That(result.Orders.Count, Is.EqualTo(4));
         }
 

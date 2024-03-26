@@ -1,6 +1,5 @@
 ﻿using log4net;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
 using WGMansion.MongoDB.Models;

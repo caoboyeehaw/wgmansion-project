@@ -1,14 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver.Search;
+﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WGMansion.Api.Controllers;
-using WGMansion.Api.Models;
 using WGMansion.Api.Models.Stocks;
 using WGMansion.Api.Models.Ticker;
 using WGMansion.Api.ViewModels;
@@ -42,7 +34,7 @@ namespace WGMansion.Api.UnitTests.Controllers
             var result = await _sut.GetTicker(ticker.Symbol);
             var okResult = result.Result as OkObjectResult;
 
-            Assert.That(result,Is.Not.Null);
+            Assert.That(result, Is.Not.Null);
             Assert.That(okResult?.StatusCode, Is.EqualTo(200));
         }
 
@@ -137,7 +129,7 @@ namespace WGMansion.Api.UnitTests.Controllers
         public async Task TestGetTickerOrderHistory()
         {
             _tickerHistoryViewModel.Setup(x => x.GetTickerHistory("TEST", 0, 10)).ReturnsAsync(new TickerHistory());
-            var result = await _sut.GetTickerOrderHistory("TEST",0,10);
+            var result = await _sut.GetTickerOrderHistory("TEST", 0, 10);
             var okResult = result.Result as OkObjectResult;
 
             Assert.That(result, Is.Not.Null);

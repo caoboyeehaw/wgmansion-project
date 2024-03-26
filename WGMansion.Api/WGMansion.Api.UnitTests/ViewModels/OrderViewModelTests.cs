@@ -1,10 +1,5 @@
 ﻿using MongoDB.Bson;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WGMansion.Api.Models;
 using WGMansion.Api.Models.Ticker;
 using WGMansion.Api.ViewModels;
@@ -23,7 +18,7 @@ namespace WGMansion.Api.UnitTests.ViewModels
         {
             _accountsViewModel = new Mock<IAccountsViewModel>();
             _tickerViewModel = new Mock<ITickerViewModel>();
-            _sut = new OrderViewModel(_accountsViewModel.Object,_tickerViewModel.Object);
+            _sut = new OrderViewModel(_accountsViewModel.Object, _tickerViewModel.Object);
         }
 
         [Test]
@@ -49,12 +44,12 @@ namespace WGMansion.Api.UnitTests.ViewModels
 
             _accountsViewModel.Setup(x => x.GetAccount("123")).ReturnsAsync(account);
             _tickerViewModel.Setup(x => x.GetTicker("ABC")).ReturnsAsync(ticker);
-            
+
             var result = await _sut.AddOrder(order, "123");
 
-            Assert.That(result,Is.Not.Null);
+            Assert.That(result, Is.Not.Null);
             Assert.That(ticker.BuyOrders.Contains(order));
-            Assert.That(account.Portfolio.Stocks.Any(x=>x.Symbol == "ABC"));
+            Assert.That(account.Portfolio.Stocks.Any(x => x.Symbol == "ABC"));
             Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Contains(order.Id));
         }
 
@@ -218,10 +213,12 @@ namespace WGMansion.Api.UnitTests.ViewModels
             var result = await _sut.AddOrder(order, "123");
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(ticker.BuyOrders.Count,Is.EqualTo(1));
+            Assert.That(ticker.BuyOrders.Count, Is.EqualTo(1));
             Assert.That(ticker.SellOrders.Count, Is.EqualTo(1));
             Assert.That(ticker.SellOrders.First().Quantity, Is.EqualTo(75));
             Assert.That(ticker.BuyOrders.First().Quantity, Is.EqualTo(50));
+            Assert.That(account.Portfolio.Money, Is.EqualTo(7500));
+            Assert.That(sellerAccount.Portfolio.Money, Is.EqualTo(-7500));
             Assert.That(account.Portfolio.Stocks.Any(x => x.Symbol == "ABC"));
             Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.EqualTo(1));
             Assert.That(sellerAccount.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.EqualTo(1));

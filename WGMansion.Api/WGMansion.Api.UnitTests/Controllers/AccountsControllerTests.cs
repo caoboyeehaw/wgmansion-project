@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WGMansion.Api.Controllers;
 using WGMansion.Api.Models;
 using WGMansion.Api.ViewModels;
@@ -28,7 +23,7 @@ namespace WGMansion.Api.UnitTests.Controllers
         public async Task TestAuthenticate()
         {
             var account = new Account();
-            _accountsViewModel.Setup(x=>x.Authenticate("username", "password")).ReturnsAsync(account);
+            _accountsViewModel.Setup(x => x.Authenticate("username", "password")).ReturnsAsync(account);
             var result = await _sut.Authenticate("username", "password");
             var okResult = result.Result as OkObjectResult;
 

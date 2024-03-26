@@ -1,12 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using WGMansion.Api.Controllers;
 using WGMansion.Api.Models.Ticker;
 using WGMansion.Api.ViewModels;
@@ -20,12 +13,12 @@ namespace WGMansion.Api.UnitTests.Controllers
         private Mock<IOrderViewModel> _orderViewModel;
 
         [SetUp]
-        public void Setup() 
+        public void Setup()
         {
             _orderViewModel = new Mock<IOrderViewModel>();
             _sut = new OrderController(_orderViewModel.Object)
             {
-               GetUserId = () => "123"
+                GetUserId = () => "123"
             };
         }
 

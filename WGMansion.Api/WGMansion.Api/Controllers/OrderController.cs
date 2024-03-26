@@ -1,7 +1,6 @@
 ﻿using log4net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using WGMansion.Api.Models;
 using WGMansion.Api.Models.Ticker;
 using WGMansion.Api.ViewModels;
@@ -34,7 +33,7 @@ namespace WGMansion.Api.Controllers
                 var result = await _orderViewModel.AddOrder(order, GetUserId());
                 return Ok(result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.Error(e.ToString());
                 return BadRequest(e.ToString());
@@ -51,7 +50,7 @@ namespace WGMansion.Api.Controllers
                 await _orderViewModel.WithdrawOrder(orderId, tickerSymbol, GetUserId());
                 return Ok(true);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.Error(e.ToString());
                 return BadRequest(e.ToString());

@@ -1,8 +1,6 @@
 ﻿using log4net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Diagnostics;
 using WGMansion.Api.Models;
 using WGMansion.Api.Models.Stocks;
 using WGMansion.Api.Models.Ticker;

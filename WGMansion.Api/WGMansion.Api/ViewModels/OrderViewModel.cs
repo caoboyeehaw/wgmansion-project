@@ -1,9 +1,7 @@
 ﻿using log4net;
 using MongoDB.Bson;
-using System;
 using WGMansion.Api.Models;
 using WGMansion.Api.Models.Ticker;
-using WGMansion.MongoDB.Services;
 
 namespace WGMansion.Api.ViewModels
 {
@@ -19,8 +17,8 @@ namespace WGMansion.Api.ViewModels
         private readonly IAccountsViewModel _accountsViewModel;
         private readonly ITickerViewModel _tickerViewModel;
 
-        public OrderViewModel(IAccountsViewModel accountsViewModel, ITickerViewModel tickerViewModel) 
-        { 
+        public OrderViewModel(IAccountsViewModel accountsViewModel, ITickerViewModel tickerViewModel)
+        {
             _accountsViewModel = accountsViewModel;
             _tickerViewModel = tickerViewModel;
         }
@@ -97,7 +95,7 @@ namespace WGMansion.Api.ViewModels
         private async Task BuyOrder(Order buyOrder, List<Order> sellOrders, Ticker ticker)
         {
             var accountsToUpdate = new List<Account>();
-            while(sellOrders.Count > 0 && buyOrder.Quantity > 0)
+            while (sellOrders.Count > 0 && buyOrder.Quantity > 0)
             {
                 await FulfillOrder(buyOrder, sellOrders[0], ticker, accountsToUpdate);
                 sellOrders.RemoveAll(x => x.Quantity == 0);
@@ -108,10 +106,10 @@ namespace WGMansion.Api.ViewModels
         private async Task SellOrder(Order sellOrder, List<Order> buyOrders, Ticker ticker)
         {
             var accountsToUpdate = new List<Account>();
-            while(buyOrders.Count > 0 && sellOrder.Quantity > 0)
+            while (buyOrders.Count > 0 && sellOrder.Quantity > 0)
             {
                 sellOrder.Price = buyOrders[0].Price;
-                await FulfillOrder(buyOrders[0],sellOrder, ticker, accountsToUpdate);
+                await FulfillOrder(buyOrders[0], sellOrder, ticker, accountsToUpdate);
                 buyOrders.RemoveAll(x => x.Quantity == 0);
             }
             await UpdateAllAccounts(accountsToUpdate);
@@ -150,7 +148,7 @@ namespace WGMansion.Api.ViewModels
         {
             if (order.Quantity != 0) return;
             account.Portfolio.Stocks.First(x => x.Symbol == order.Symbol).Orders.Remove(order.Id);
-            if(order.OrderType == OrderType.MarketBuy || order.OrderType == OrderType.LimitBuy)
+            if (order.OrderType == OrderType.MarketBuy || order.OrderType == OrderType.LimitBuy)
             {
                 ticker.BuyOrders.Remove(order);
             }
@@ -165,7 +163,7 @@ namespace WGMansion.Api.ViewModels
         {
             var removeCount = 0;
             var ticker = await _tickerViewModel.GetTicker(tickerSymbol);
-            removeCount += ticker.BuyOrders.RemoveAll(x=>x.Id == orderId);
+            removeCount += ticker.BuyOrders.RemoveAll(x => x.Id == orderId);
             removeCount += ticker.SellOrders.RemoveAll(x => x.Id == orderId);
             var account = await _accountsViewModel.GetAccount(userId);
             account.Portfolio.Stocks.First(x => x.Symbol == tickerSymbol).Orders.Remove(orderId);

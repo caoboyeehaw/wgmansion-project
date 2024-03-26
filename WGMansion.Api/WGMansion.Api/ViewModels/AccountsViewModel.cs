@@ -1,13 +1,6 @@
 ﻿using log4net;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Numerics;
-using System.Security.Claims;
-using System.Text;
 using WGMansion.Api.Models;
 using WGMansion.Api.Services;
-using WGMansion.Api.Settings;
 using WGMansion.Api.Utility;
 using WGMansion.MongoDB.Services;
 
