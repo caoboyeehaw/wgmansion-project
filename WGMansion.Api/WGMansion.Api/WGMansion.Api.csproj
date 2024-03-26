@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>32c6e8e9-b32b-422c-8a0a-b3566ae4c91c</UserSecretsId>
+    <StartupObject>Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +16,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WGMansion.MongoDB\WGMansion.MongoDB.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

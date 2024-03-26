@@ -3,6 +3,7 @@ using log4net.Config;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using WGMansion.Api.Settings;
@@ -19,6 +20,8 @@ internal class Program
     {
         var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
         XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+        Trace.Listeners.Add(new Log4NetTraceListener());
+
         _logger.Info($"--------Starting Server--------");
 
         var builder = WebApplication.CreateBuilder(args);
@@ -58,6 +61,7 @@ internal class Program
         builder.Services.AddTransient<ITickerViewModel, TickerViewModel>();
         builder.Services.AddTransient<ITickerHistoryViewModel, TickerHistoryViewModel>();
         builder.Services.AddTransient<IOrderViewModel, OrderViewModel>();
+        builder.Services.AddTransient<IHealthcheckViewModel, HealthcheckViewModel>();
 
         builder.Configuration.AddUserSecrets<MongoSettings>();
         builder.Configuration.AddUserSecrets<AppSettings>();
@@ -89,14 +93,14 @@ internal class Program
 
         var app = builder.Build();
 
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.UseHttpsRedirection();
-
+        app.UseCors(x => x
+        .AllowAnyHeader()
+        .SetIsOriginAllowed(origin => true)
+        .AllowCredentials());
         app.UseAuthentication();
         app.UseAuthorization();
 

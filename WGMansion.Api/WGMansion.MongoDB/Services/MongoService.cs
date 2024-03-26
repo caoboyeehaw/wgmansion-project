@@ -1,6 +1,7 @@
 ﻿using log4net;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using MongoDB.Driver.Core.Servers;
 using System.Linq.Expressions;
 using WGMansion.MongoDB.Models;
 using WGMansion.MongoDB.Settings;
@@ -9,6 +10,7 @@ namespace WGMansion.MongoDB.Services
 {
     public class MongoService<TDocument> : IMongoService<TDocument> where TDocument : IDocument
     {
+        private MongoClient _client;
         private IMongoDatabase _database;
         private IMongoCollection<TDocument> _collection;
         private MongoSettings _mongoSettings;
@@ -18,9 +20,14 @@ namespace WGMansion.MongoDB.Services
         {
             _logger.Info($"Connecting to Mongo...");
             _mongoSettings = mongoSettings.Value;
-            var client = new MongoClient($"mongodb+srv://{_mongoSettings.Account}:{_mongoSettings.Password}@{_mongoSettings.Url}?retryWrites=true&w=majority");
-            _database = client.GetDatabase($"{_mongoSettings.Database}");
+            _client = new MongoClient($"mongodb+srv://{_mongoSettings.Account}:{_mongoSettings.Password}@{_mongoSettings.Url}?retryWrites=true&w=majority");
+            _database = _client.GetDatabase($"{_mongoSettings.Database}");
             _logger.Info($"Connected.");
+        }
+
+        public int Ping()
+        {
+            return _client.Cluster.Description.Servers.Count(x => x.State == ServerState.Connected);
         }
 
         public void SetCollection(string collection)
