@@ -1,14 +1,7 @@
-﻿using Microsoft.Extensions.Options;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Moq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using WGMansion.Api.Models;
 using WGMansion.Api.Services;
-using WGMansion.Api.Settings;
 using WGMansion.Api.Utility;
 using WGMansion.Api.ViewModels;
 using WGMansion.MongoDB.Services;
@@ -46,9 +39,9 @@ namespace WGMansion.Api.UnitTests.ViewModels
                 UserName = "username",
                 Password = EncryptionService.HashPassword(password)
             };
-            _mongoService.Setup( x =>  x.FindOneAsync(x => x.UserName == authUser.UserName)).ReturnsAsync(dbUser);
+            _mongoService.Setup(x => x.FindOneAsync(x => x.UserName == "username")).ReturnsAsync(dbUser);
 
-            var result = await _sut.Authenticate(authUser);
+            var result = await _sut.Authenticate("username", "password");
 
             _tokenGenerator.Verify(x => x.GetToken(dbUser), Times.Once);
             Assert.That(result.Password, Is.Null);
@@ -64,10 +57,10 @@ namespace WGMansion.Api.UnitTests.ViewModels
                 UserName = "username",
                 Password = password
             };
-            _mongoService.Setup(x => x.FindOneAsync(x => x.UserName == authUser.UserName)).ReturnsAsync((Account)null);
+            _mongoService.Setup(x => x.FindOneAsync(x => x.UserName == "username")).ReturnsAsync((Account)null);
 
-            var result = Assert.ThrowsAsync<Exception>(async ()=>await _sut.Authenticate(authUser));
-            Assert.That(result.Message, Is.EqualTo($"User not found {authUser.Id} {authUser.UserName}"));
+            var result = Assert.ThrowsAsync<Exception>(async () => await _sut.Authenticate("username", "password"));
+            Assert.That(result.Message, Is.EqualTo($"User not found {authUser.UserName}"));
 
         }
 
@@ -84,10 +77,10 @@ namespace WGMansion.Api.UnitTests.ViewModels
                 UserName = "username",
                 Password = EncryptionService.HashPassword("wrong password")
             };
-            _mongoService.Setup(x => x.FindOneAsync(x => x.UserName == authUser.UserName)).ReturnsAsync(dbUser);
+            _mongoService.Setup(x => x.FindOneAsync(x => x.UserName == "username")).ReturnsAsync(dbUser);
 
-            var result = Assert.ThrowsAsync<Exception>(async () => await _sut.Authenticate(authUser));
-            Assert.That(result.Message, Is.EqualTo($"Wrong password for user {authUser.Id} {authUser.UserName}"));
+            var result = Assert.ThrowsAsync<Exception>(async () => await _sut.Authenticate("username", "password"));
+            Assert.That(result.Message, Is.EqualTo($"Wrong password for user {authUser.Password}"));
         }
 
         [Test]
@@ -99,9 +92,9 @@ namespace WGMansion.Api.UnitTests.ViewModels
                 Password = "password"
             };
 
-            _mongoService.Setup(x => x.FilterBy(x => x.UserName == newUser.UserName)).Returns(new List<Account>());
+            _mongoService.Setup(x => x.FilterBy(x => x.UserName == "username")).Returns(new List<Account>());
 
-            var result = await _sut.CreateAccount(newUser);
+            var result = await _sut.CreateAccount("username", "password");
 
             _mongoService.Verify(x => x.InsertOneAsync(It.IsAny<Account>()), Times.Once);
 
@@ -118,9 +111,9 @@ namespace WGMansion.Api.UnitTests.ViewModels
                 Password = "password"
             };
 
-            _mongoService.Setup(x => x.FilterBy(It.IsAny<Expression<Func<Account,bool>>>())).Returns(new List<Account> { newUser });
+            _mongoService.Setup(x => x.FilterByAsync(It.IsAny<Expression<Func<Account, bool>>>())).ReturnsAsync(new List<Account> { newUser });
 
-            var result = Assert.ThrowsAsync<Exception>(async () => await _sut.CreateAccount(newUser));
+            var result = Assert.ThrowsAsync<Exception>(async () => await _sut.CreateAccount("username", "password"));
             Assert.That(result.Message, Is.EqualTo($"User already exists : {newUser.UserName}"));
         }
     }

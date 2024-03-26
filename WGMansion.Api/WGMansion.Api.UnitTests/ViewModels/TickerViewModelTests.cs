@@ -1,11 +1,5 @@
 ﻿using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using WGMansion.Api.Models;
 using WGMansion.Api.Models.Ticker;
 using WGMansion.Api.ViewModels;
 using WGMansion.MongoDB.Services;
@@ -32,7 +26,7 @@ namespace WGMansion.Api.UnitTests.ViewModels
             _mongoService.Setup(x => x.FindOneAsync(It.IsAny<Expression<Func<Ticker, bool>>>())).ReturnsAsync(ticker);
 
             var result = await _sut.GetTicker("TEST");
-            _mongoService.Verify(x=>x.SetCollection("tickers"),Times.Once());
+            _mongoService.Verify(x => x.SetCollection("tickers"), Times.Once());
 
             Assert.That(result, Is.Not.Null);
         }
@@ -44,7 +38,7 @@ namespace WGMansion.Api.UnitTests.ViewModels
             _mongoService.Setup(x => x.FindOneAsync(It.IsAny<Expression<Func<Ticker, bool>>>())).ReturnsAsync(ticker);
             Ticker? result = null;
 
-            Assert.DoesNotThrowAsync(async ()=> result = await _sut.GetTicker("TEST"));
+            Assert.DoesNotThrowAsync(async () => result = await _sut.GetTicker("TEST"));
             _mongoService.Verify(x => x.SetCollection("tickers"), Times.Once());
 
             Assert.That(result, Is.Null);

@@ -1,12 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
+using MongoDB.Driver.Linq;
 using Moq;
+using System.IdentityModel.Tokens.Jwt;
 using WGMansion.Api.Models;
 using WGMansion.Api.Settings;
 using WGMansion.Api.Utility;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using System.IdentityModel.Tokens.Jwt;
-using MongoDB.Driver.Linq;
 
 namespace WGMansion.Api.UnitTests.Utilities
 {
@@ -35,7 +33,7 @@ namespace WGMansion.Api.UnitTests.Utilities
         {
             var account = new Account
             {
-                Id = new ObjectId(),
+                Id = "123",
                 Role = "Admin"
             };
 
@@ -43,7 +41,7 @@ namespace WGMansion.Api.UnitTests.Utilities
             var token = new JwtSecurityToken(result);
             var date = DateTime.UtcNow.AddDays(7);
 
-            Assert.That(result,Is.Not.Null);
+            Assert.That(result, Is.Not.Null);
             Assert.That(token.Claims.First(x => x.Type == "role").Value, Is.EquivalentTo("Admin"));
             Assert.That(token.ValidTo.Date, Is.EqualTo(date.Date));
         }

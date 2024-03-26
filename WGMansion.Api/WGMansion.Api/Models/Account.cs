@@ -1,5 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using WGMansion.MongoDB.Models;
 
 namespace WGMansion.Api.Models
@@ -8,7 +8,7 @@ namespace WGMansion.Api.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId Id { get; set; }
+        public string Id { get; set; }
         [BsonElement("type")]
         public string Type { get; set; } = "account";
         [BsonElement("active")]
@@ -23,5 +23,8 @@ namespace WGMansion.Api.Models
         public string Role { get; set; }
         [BsonIgnore]
         public string Token { get; set; }
+        [BsonElement("portfoilo")]
+        public Portfolio Portfolio { get; set; } = new Portfolio();
+
     }
 }

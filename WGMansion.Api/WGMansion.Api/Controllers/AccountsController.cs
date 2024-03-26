@@ -6,7 +6,7 @@ using WGMansion.Api.ViewModels;
 
 namespace WGMansion.Api.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = Roles.User)]
     [Route("v1/[controller]")]
     [ApiController]
     public class AccountsController : ControllerBase
@@ -21,12 +21,12 @@ namespace WGMansion.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public async Task<ActionResult<Account>> Authenticate([FromBody] Account user)
+        public async Task<ActionResult<Account>> Authenticate(string username, string password)
         {
             try
             {
-                _logger.Info($"Authenticating User: {user.UserName}");
-                var document = await _accountsViewModel.Authenticate(user);
+                _logger.Info($"Authenticating User: {username}");
+                var document = await _accountsViewModel.Authenticate(username, password);
                 return Ok(document);
             }
             catch (Exception e)
@@ -38,12 +38,12 @@ namespace WGMansion.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<ActionResult<Account>> CreateUser([FromBody] Account user)
+        public async Task<ActionResult<Account>> CreateUser(string username, string password)
         {
             try
             {
-                _logger.Info($"Creating User: {user.UserName}");
-                var result = await _accountsViewModel.CreateAccount(user);
+                _logger.Info($"Creating User: {username}");
+                var result = await _accountsViewModel.CreateAccount(username, password);
                 _logger.Info($"Created {result.Id}");
                 return Ok(result);
             }

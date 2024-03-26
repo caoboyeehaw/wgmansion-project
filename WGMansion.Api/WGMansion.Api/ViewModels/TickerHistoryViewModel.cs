@@ -1,4 +1,5 @@
-﻿using WGMansion.Api.Models.Stocks;
+﻿using log4net;
+using WGMansion.Api.Models.Stocks;
 using WGMansion.Api.Models.Ticker;
 using WGMansion.MongoDB.Services;
 
@@ -13,6 +14,7 @@ namespace WGMansion.Api.ViewModels
 
     public class TickerHistoryViewModel : ITickerHistoryViewModel
     {
+        private readonly ILog _logger = LogManager.GetLogger(typeof(TickerHistoryViewModel));
         private readonly IMongoService<TickerHistory> _mongoService;
         private const string TICKERS_COLLECTION = "tickers";
         private const string TICKER_HISTORY_TYPE = "ticker_history";
@@ -47,9 +49,7 @@ namespace WGMansion.Api.ViewModels
         {
             _mongoService.SetCollection(TICKERS_COLLECTION);
             var result = await _mongoService.FindOneAsync(x => x.Type == TICKER_HISTORY_TYPE && x.Symbol == order.Symbol);
-            var orders = result.Orders.ToList();
-            orders.Add(order);
-            result.Orders = orders;
+            result.Orders.Add(order);
             await _mongoService.ReplaceOneAsync(result);
             return result;
         }

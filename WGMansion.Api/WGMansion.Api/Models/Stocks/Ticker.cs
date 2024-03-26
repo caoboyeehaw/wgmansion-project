@@ -1,5 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using WGMansion.MongoDB.Models;
 
 namespace WGMansion.Api.Models.Ticker
@@ -8,7 +8,7 @@ namespace WGMansion.Api.Models.Ticker
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId Id { get; set; }
+        public string Id { get; set; }
         [BsonElement("type")]
         public string Type { get; set; } = "ticker";
         [BsonElement("active")]

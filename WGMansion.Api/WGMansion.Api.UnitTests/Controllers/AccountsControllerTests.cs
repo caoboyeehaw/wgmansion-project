@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WGMansion.Api.Controllers;
 using WGMansion.Api.Models;
 using WGMansion.Api.ViewModels;
@@ -28,50 +23,48 @@ namespace WGMansion.Api.UnitTests.Controllers
         public async Task TestAuthenticate()
         {
             var account = new Account();
-            _accountsViewModel.Setup(x=>x.Authenticate(account)).ReturnsAsync(account);
-            var result = await _sut.Authenticate(account);
+            _accountsViewModel.Setup(x => x.Authenticate("username", "password")).ReturnsAsync(account);
+            var result = await _sut.Authenticate("username", "password");
             var okResult = result.Result as OkObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(okResult?.StatusCode == 200);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(okResult?.StatusCode, Is.EqualTo(200));
         }
 
         [Test]
         public async Task TestAuthenticateBadResult()
         {
             var account = new Account();
-            _accountsViewModel.Setup(x => x.Authenticate(account)).ThrowsAsync(new Exception());
-            var result = await _sut.Authenticate(account);
+            _accountsViewModel.Setup(x => x.Authenticate("username", "password")).ThrowsAsync(new Exception());
+            var result = await _sut.Authenticate("username", "password");
             var badResult = result.Result as BadRequestObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(badResult?.StatusCode == 400);
-
+            Assert.That(result, Is.Not.Null);
+            Assert.That(badResult?.StatusCode, Is.EqualTo(400));
         }
 
         [Test]
         public async Task TestCreateUser()
         {
             var account = new Account();
-            _accountsViewModel.Setup(x => x.CreateAccount(account)).ReturnsAsync(account);
-            var result = await _sut.CreateUser(account);
+            _accountsViewModel.Setup(x => x.CreateAccount("username", "password")).ReturnsAsync(account);
+            var result = await _sut.CreateUser("username", "password");
             var okResult = result.Result as OkObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(okResult?.StatusCode == 200);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(okResult?.StatusCode, Is.EqualTo(200));
         }
 
         [Test]
         public async Task TestCreateUserBadResult()
         {
             var account = new Account();
-            _accountsViewModel.Setup(x => x.CreateAccount(account)).ThrowsAsync(new Exception());
-            var result = await _sut.CreateUser(account);
+            _accountsViewModel.Setup(x => x.CreateAccount("username", "password")).ThrowsAsync(new Exception());
+            var result = await _sut.CreateUser("username", "password");
             var badResult = result.Result as BadRequestObjectResult;
 
-            Assert.That(result != null);
-            Assert.That(badResult?.StatusCode == 400);
-
+            Assert.That(result, Is.Not.Null);
+            Assert.That(badResult?.StatusCode, Is.EqualTo(400));
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using log4net;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
 using WGMansion.MongoDB.Models;
@@ -66,8 +65,7 @@ namespace WGMansion.MongoDB.Services
 
         public virtual TDocument FindById(string id)
         {
-            var objectId = new ObjectId(id);
-            var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
+            var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, id);
             return _collection.Find(filter).SingleOrDefault();
         }
 
@@ -75,8 +73,7 @@ namespace WGMansion.MongoDB.Services
         {
             return Task.Run(() =>
             {
-                var objectId = new ObjectId(id);
-                var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
+                var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, id);
                 return _collection.Find(filter).SingleOrDefaultAsync();
             });
         }
@@ -125,16 +122,14 @@ namespace WGMansion.MongoDB.Services
 
         public void DeleteById(string id)
         {
-            var objectId = new ObjectId(id);
-            var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
+            var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, id);
             _collection.FindOneAndDelete(filter);
         }
         public Task DeleteByIdAsync(string id)
         {
             return Task.Run(() =>
             {
-                var objectId = new ObjectId(id);
-                var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
+                var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, id);
                 _collection.FindOneAndDeleteAsync(filter);
             });
         }

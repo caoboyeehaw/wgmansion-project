@@ -1,7 +1,7 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
-using WGMansion.MongoDB.Models;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using WGMansion.Api.Models.Ticker;
+using WGMansion.MongoDB.Models;
 
 namespace WGMansion.Api.Models.Stocks
 {
@@ -9,7 +9,7 @@ namespace WGMansion.Api.Models.Stocks
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId Id { get; set; }
+        public string Id { get; set; }
         [BsonElement("type")]
         public string Type { get; set; } = "ticker_history";
         [BsonElement("active")]
@@ -17,7 +17,7 @@ namespace WGMansion.Api.Models.Stocks
         [BsonElement("symbol")]
         public string Symbol { get; set; }
         [BsonElement("orders")]
-        public IEnumerable<Order> Orders { get; set; }
+        public List<Order> Orders { get; set; } = new List<Order>();
 
     }
 }

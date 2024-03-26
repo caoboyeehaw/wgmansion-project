@@ -1,4 +1,4 @@
-﻿using WGMansion.Api.Models.Stocks;
+﻿using log4net;
 using WGMansion.Api.Models.Ticker;
 using WGMansion.MongoDB.Services;
 
@@ -9,10 +9,12 @@ namespace WGMansion.Api.ViewModels
         Task<Ticker> GetTicker(string symbol);
         Task<List<Ticker>> GetAllTickers();
         Task<Ticker> CreateTicker(string symbol);
+        Task<Ticker> UpdateTicker(Ticker ticker);
     }
 
     public class TickerViewModel : ITickerViewModel
     {
+        private readonly ILog _logger = LogManager.GetLogger(typeof(TickerViewModel));
         private readonly IMongoService<Ticker> _mongoService;
         private const string TICKERS_COLLECTION = "tickers";
         private const string TICKER_TYPE = "ticker";
@@ -46,6 +48,13 @@ namespace WGMansion.Api.ViewModels
             var ticker = new Ticker { Symbol = symbol };
 
             await _mongoService.InsertOneAsync(ticker);
+            return ticker;
+        }
+
+        public async Task<Ticker> UpdateTicker(Ticker ticker)
+        {
+            _mongoService.SetCollection(TICKERS_COLLECTION);
+            await _mongoService.ReplaceOneAsync(ticker);
             return ticker;
         }
     }
