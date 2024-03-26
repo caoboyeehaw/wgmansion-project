@@ -5,6 +5,7 @@ namespace WGMansion.MongoDB.Services
 {
     public interface IMongoService<TDocument> where TDocument : IDocument
     {
+        int Ping();
         void SetCollection(string collection);
         IQueryable<TDocument> AsQueryable();
         IEnumerable<TDocument> FilterBy(
