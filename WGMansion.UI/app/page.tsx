@@ -254,7 +254,7 @@ export default function Home() {
                 </Card>
                 <Card className="col-span-3">
                   <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
+                    <CardTitle>Bot 1: botName</CardTitle>
                     <CardDescription>
                       You made 265 sales this month.
                     </CardDescription>
@@ -275,9 +275,9 @@ export default function Home() {
                 </Card>
                 <Card className="col-span-3">
                   <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
+                    <CardTitle>Bot 2: botName</CardTitle>
                     <CardDescription>
-                      You made 265 sales this month.
+                      You made 427 sales this month.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>

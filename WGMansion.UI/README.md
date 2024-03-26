@@ -33,3 +33,6 @@ frontend dependencies notes:
 conisderations:
 - might consider aceternity ui for some fancy fx, and radix icons for more use of icons.
 - future plans include designing custom modals using shadcn component ~ component art i guess??
+
+
+color codes will include blue for stocks, and green for options
