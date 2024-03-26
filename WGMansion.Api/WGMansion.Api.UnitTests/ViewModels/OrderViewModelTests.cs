@@ -398,5 +398,50 @@ namespace WGMansion.Api.UnitTests.ViewModels
             Assert.That(sellerAccount.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count == 1);
         }
 
+        [Test]
+        public async Task TestWithdrawOrder()
+        {
+            var order = new Order
+            {
+                Id = "123",
+                OwnerId = "321",
+                Symbol = "ABC"
+            };
+            var ticker = new Ticker
+            {
+                Symbol = "ABC",
+                BuyOrders =
+                {
+                    new Order
+                    {
+                        Id = "123"
+                    }
+                }
+            };
+            var account = new Account
+            {
+                Portfolio = new Portfolio
+                {
+                    Stocks = new List<Stock>
+                    {
+                        new Stock
+                        {
+                            Symbol = "ABC",
+                            Orders = new List<string>
+                            {
+                                order.Id
+                            }
+                        }
+                    }
+                }
+            };
+
+            _tickerViewModel.Setup(x => x.GetTicker("ABC")).ReturnsAsync(ticker);
+            _accountsViewModel.Setup(x => x.GetAccount("321")).ReturnsAsync(account);
+
+            await _sut.WithdrawOrder("123", "ABC", "321");
+            Assert.That(account.Portfolio.Stocks.First().Orders.Count, Is.Zero);
+            Assert.That(ticker.BuyOrders.Count, Is.Zero);
+        }
     }
 }
