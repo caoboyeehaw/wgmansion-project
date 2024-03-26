@@ -63,7 +63,9 @@ export default function Home() {
       </div>
       <div className="hidden flex-col md:flex">
         <div className=""> {/*this was originally: <div className="border-b">*/}
-        <div className="flex h-16 items-center px-6 w-full top-0 bg-white/90 backdrop-blur-lg fixed z-50">
+        
+        {/*for the one below, you might have to consider dark and light modes*/}
+        <div className="flex h-16 items-center px-6 w-full top-0 bg-white/80 backdrop-blur-lg fixed z-50">
           <div className ="mr-6 ">
           
             <Sheet >
