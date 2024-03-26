@@ -13,11 +13,20 @@ import {
 } from "@/components/ui/card"
 
 import {
-  Tabs,
+  Tabs, 
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 
 import { CalendarDateRangePicker } from "@/components/date-range-picker"
 import { MainNav } from "@/components/main-nav"
@@ -30,8 +39,6 @@ import { UserNav } from "@/components/user-nav"
 export const metadata: Metadata = {
   title: "Stonk Simulator",
   description: "A Website Built for Stonk Simulations.",
-
-
 }
 
 export default function Home() {
@@ -59,6 +66,17 @@ export default function Home() {
           <TeamSwitcher />
           
           <MainNav className="mx-6" />
+          <Sheet>
+          <SheetTrigger>[Hamburger menus]</SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Sheet title lol?</SheetTitle>
+                <SheetDescription>
+                  This is just a test sheet so i can put content here
+                </SheetDescription>
+              </SheetHeader>
+            </SheetContent>
+          </Sheet>
           <div className="flex-1 flex justify-center">
             <Search />
           </div>
@@ -78,7 +96,7 @@ export default function Home() {
           <Tabs defaultValue="overview" className="space-y-4">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="analytics" disabled>
+              <TabsTrigger value="analytics" >
                 Analytics
               </TabsTrigger>
               <TabsTrigger value="reports" disabled>
