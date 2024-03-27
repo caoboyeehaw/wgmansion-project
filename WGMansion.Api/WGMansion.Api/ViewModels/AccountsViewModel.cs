@@ -9,7 +9,7 @@ namespace WGMansion.Api.ViewModels
     public interface IAccountsViewModel
     {
         Task<Account> Authenticate(string username, string password);
-        Task<Account> CreateAccount(string username, string password);
+        Task<Account> CreateAccount(string username, string password, string email);
         Task<Account> GetAccount(string id);
         Task<Account> UpdateAccount(Account account);
     }
@@ -31,19 +31,24 @@ namespace WGMansion.Api.ViewModels
         public async Task<Account> Authenticate(string username, string password)
         {
             _mongoService.SetCollection(ACCOUNTS_COLLECTION);
-            var user = (await _mongoService.FindOneAsync(x => x.UserName == username));
+            var account = (await _mongoService.FindOneAsync(x => x.UserName == username));
 
-            if (user == null)
+            if (account == null)
                 throw new Exception($"User not found {username}");
-            if (!EncryptionService.VerifyPassword(password, user.Password))
+            if (!EncryptionService.VerifyPassword(password, account.Password))
                 throw new Exception($"Wrong password for user {password}");
+            if (!account.Active)
+                throw new Exception($"User {username} inactive: Banned account?");
 
-            user.Token = _tokenGenerator.GetToken(user);
-            user.Password = null;
-            return user;
+            account.LastLogin = DateTime.UtcNow;
+            await UpdateAccount(account);
+
+            account.Token = _tokenGenerator.GetToken(account);
+            account.Password = null;
+            return account;
         }
 
-        public async Task<Account> CreateAccount(string username, string password)
+        public async Task<Account> CreateAccount(string username, string password, string email)
         {
             var newUser = new Account
             {
@@ -51,6 +56,8 @@ namespace WGMansion.Api.ViewModels
                 Type = TYPE_VALUE,
                 Password = EncryptionService.HashPassword(password),
                 Role = "User",
+                CreationDate = DateTime.UtcNow,
+                Email = email
             };
 
             _mongoService.SetCollection(ACCOUNTS_COLLECTION);

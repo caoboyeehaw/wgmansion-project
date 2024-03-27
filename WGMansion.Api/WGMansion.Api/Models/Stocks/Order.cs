@@ -12,7 +12,7 @@ namespace WGMansion.Api.Models.Ticker
         [BsonElement("type")]
         public string Type { get; set; } = "order";
         [BsonElement("active")]
-        public bool Active { get; set; }
+        public bool Active { get; set; } = true;
         [BsonElement("ownerId")]
         [BsonRepresentation(BsonType.ObjectId)]
         public string OwnerId { get; set; }

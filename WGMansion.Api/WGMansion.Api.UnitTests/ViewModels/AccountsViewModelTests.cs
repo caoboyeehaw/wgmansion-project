@@ -42,10 +42,12 @@ namespace WGMansion.Api.UnitTests.ViewModels
             _mongoService.Setup(x => x.FindOneAsync(x => x.UserName == "username")).ReturnsAsync(dbUser);
 
             var result = await _sut.Authenticate("username", "password");
-
+            _mongoService.Verify(x=>x.ReplaceOneAsync(dbUser), Times.Once());
             _tokenGenerator.Verify(x => x.GetToken(dbUser), Times.Once);
+
             Assert.That(result.Password, Is.Null);
             Assert.That(result.Token, Is.EqualTo("new token"));
+            Assert.That(result.LastLogin.ToShortDateString(), Is.EqualTo(DateTime.UtcNow.ToShortDateString()));
         }
 
         [Test]
@@ -84,19 +86,41 @@ namespace WGMansion.Api.UnitTests.ViewModels
         }
 
         [Test]
+        public void TestAuthenticateBannedAccount()
+        {
+            var authUser = new Account
+            {
+                UserName = "username",
+                Password = "password"
+            };
+            var dbUser = new Account
+            {
+                UserName = "username",
+                Password = EncryptionService.HashPassword("password"),
+                Active = false
+            };
+            _mongoService.Setup(x => x.FindOneAsync(x => x.UserName == "username")).ReturnsAsync(dbUser);
+
+            var result = Assert.ThrowsAsync<Exception>(async () => await _sut.Authenticate("username", "password"));
+            Assert.That(result.Message, Is.EqualTo($"User username inactive: Banned account?"));
+        }
+
+
+        [Test]
         public async Task TestCreateUser()
         {
             var newUser = new Account
             {
                 UserName = "username",
-                Password = "password"
+                Password = "password",
+                Email = "email"
             };
 
             _mongoService.Setup(x => x.FilterBy(x => x.UserName == "username")).Returns(new List<Account>());
 
-            var result = await _sut.CreateAccount("username", "password");
+            var result = await _sut.CreateAccount("username", "password", "email");
 
-            _mongoService.Verify(x => x.InsertOneAsync(It.IsAny<Account>()), Times.Once);
+            _mongoService.Verify(x => x.InsertOneAsync(newUser), Times.Once);
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Password, Is.Null);
@@ -113,7 +137,7 @@ namespace WGMansion.Api.UnitTests.ViewModels
 
             _mongoService.Setup(x => x.FilterByAsync(It.IsAny<Expression<Func<Account, bool>>>())).ReturnsAsync(new List<Account> { newUser });
 
-            var result = Assert.ThrowsAsync<Exception>(async () => await _sut.CreateAccount("username", "password"));
+            var result = Assert.ThrowsAsync<Exception>(async () => await _sut.CreateAccount("username", "password", "email"));
             Assert.That(result.Message, Is.EqualTo($"User already exists : {newUser.UserName}"));
         }
     }
