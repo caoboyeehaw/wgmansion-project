@@ -13,27 +13,21 @@ export function MainNav({
     >
       <Link
         href="/examples/dashboard"
-        className="text-sm font-medium transition-colors hover:text-primary"
+        className="text-sm font-medium transition-colors hover:text-primary rounded-lg bg-teal-100 px-3 py-1.5"
       >
-        Overview
+        Create Bot+
       </Link>
       <Link
-        href="/examples/dashboard"
+        href=""
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Customers
+        Message
       </Link>
       <Link
-        href="/examples/dashboard"
+        href=""
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Products
-      </Link>
-      <Link
-        href="/examples/dashboard"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-      >
-        Settings
+        Updates
       </Link>
     </nav>
   )

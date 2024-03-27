@@ -24,14 +24,14 @@ import {
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
               <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-              <AvatarFallback>SC</AvatarFallback>
+              <AvatarFallback>DC</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">shadcn</p>
+              <p className="text-sm font-medium leading-none">Dylan Cao</p>
               <p className="text-xs leading-none text-muted-foreground">
                 user@example.com
               </p>
@@ -40,11 +40,11 @@ import {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              Profile
+              Account
               <DropdownMenuShortcut></DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              Billing
+              Premium
               <DropdownMenuShortcut></DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem>
@@ -55,7 +55,7 @@ import {
               Themes
               <DropdownMenuShortcut></DropdownMenuShortcut>
             </DropdownMenuItem>
-            <DropdownMenuItem>New Team</DropdownMenuItem>
+
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem>

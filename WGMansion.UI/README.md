@@ -36,3 +36,5 @@ conisderations:
 
 
 color codes will include blue for stocks, and green for options
+
+
