@@ -26,5 +26,9 @@ namespace WGMansion.Api.Models.Ticker
         public int Quantity { get; set; }
         [BsonElement("maxQuantity")]
         public int MaxQuantity { get; set; }
+        [BsonElement("postDate")]
+        public DateTime PostDate { get; set; }
+        [BsonElement("fulfillDate")]
+        public DateTime? FulfillDate { get; set; } = null;
     }
 }

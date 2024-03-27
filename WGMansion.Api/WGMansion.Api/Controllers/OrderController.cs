@@ -25,12 +25,12 @@ namespace WGMansion.Api.Controllers
 
         [HttpPost]
         [Route("/addorder")]
-        public async Task<ActionResult<Order>> AddOrder([FromBody] Order order)
+        public async Task<ActionResult<Order>> AddOrder(string symbol, float price, int quantity, OrderType orderType)
         {
             try
             {
-                _logger.Info($"Adding order: {order.Symbol} {order.OrderType} ${order.Price} #{order.Quantity}");
-                var result = await _orderViewModel.AddOrder(order, GetUserId());
+                _logger.Info($"Adding order: {symbol} {orderType} ${price} #{quantity}");
+                var result = await _orderViewModel.AddOrder(symbol, price, quantity, orderType, GetUserId());
                 return Ok(result);
             }
             catch (Exception e)

@@ -12,5 +12,7 @@ namespace WGMansion.Api.Models.Ticker
         public int Quantity { get; set; }
         [BsonElement("orders")]
         public List<string> Orders { get; set; } = new List<string>();
+        [BsonElement("orderHistory")]
+        public List<Order> OrderHistory { get; set; } = new List<Order>();
     }
 }

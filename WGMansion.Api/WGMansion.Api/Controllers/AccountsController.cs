@@ -31,7 +31,7 @@ namespace WGMansion.Api.Controllers
                 var result = await _accountsViewModel.GetAccount(GetUserId());
                 return Ok(result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.Error(e);
                 return BadRequest(e);

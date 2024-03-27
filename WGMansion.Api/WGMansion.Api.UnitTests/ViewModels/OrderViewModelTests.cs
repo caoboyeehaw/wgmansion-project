@@ -12,13 +12,16 @@ namespace WGMansion.Api.UnitTests.ViewModels
         private OrderViewModel _sut;
         private Mock<IAccountsViewModel> _accountsViewModel;
         private Mock<ITickerViewModel> _tickerViewModel;
+        private Mock<ITickerHistoryViewModel> _tickerHistoryViewModel;
 
         [SetUp]
         public void Setup()
         {
             _accountsViewModel = new Mock<IAccountsViewModel>();
             _tickerViewModel = new Mock<ITickerViewModel>();
-            _sut = new OrderViewModel(_accountsViewModel.Object, _tickerViewModel.Object);
+            _tickerHistoryViewModel = new Mock<ITickerHistoryViewModel>();
+
+            _sut = new OrderViewModel(_accountsViewModel.Object, _tickerViewModel.Object, _tickerHistoryViewModel.Object);
         }
 
         [Test]
@@ -45,12 +48,12 @@ namespace WGMansion.Api.UnitTests.ViewModels
             _accountsViewModel.Setup(x => x.GetAccount("123")).ReturnsAsync(account);
             _tickerViewModel.Setup(x => x.GetTicker("ABC")).ReturnsAsync(ticker);
 
-            var result = await _sut.AddOrder(order, "123");
+            var result = await _sut.AddOrder(order.Symbol, order.Price, order.Quantity, order.OrderType, "123");
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(ticker.BuyOrders.Contains(order));
+            Assert.That(ticker.BuyOrders.Count, Is.EqualTo(1));
             Assert.That(account.Portfolio.Stocks.Any(x => x.Symbol == "ABC"));
-            Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Contains(order.Id));
+            Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -126,16 +129,89 @@ namespace WGMansion.Api.UnitTests.ViewModels
             _accountsViewModel.Setup(x => x.GetAccount("321")).ReturnsAsync(sellerAccount);
             _tickerViewModel.Setup(x => x.GetTicker("ABC")).ReturnsAsync(ticker);
 
-            var result = await _sut.AddOrder(order, "123");
+            var result = await _sut.AddOrder(order.Symbol, order.Price, order.Quantity, order.OrderType, "123");
 
+            _tickerHistoryViewModel.Verify(x => x.AddOrderToHistory(It.IsAny<List<Order>>()), Times.Once);
             Assert.That(result, Is.Not.Null);
-            Assert.That(ticker.BuyOrders.Count == 0);
-            Assert.That(ticker.SellOrders.Count == 1);
+            Assert.That(ticker.BuyOrders.Count, Is.Zero);
+            Assert.That(ticker.SellOrders.Count, Is.EqualTo(1));
             Assert.That(ticker.SellOrders.First().Quantity, Is.EqualTo(25));
             Assert.That(account.Portfolio.Stocks.Any(x => x.Symbol == "ABC"));
-            Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count == 0);
-            Assert.That(sellerAccount.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count == 1);
+            Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.Zero);
+            Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").OrderHistory.Count, Is.EqualTo(1));
+            Assert.That(sellerAccount.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.EqualTo(1));
         }
+
+        [Test]
+        public async Task TestOnlyMarketOrders()
+        {
+            var sellOrderOne = new Order
+            {
+                Id = ObjectId.GenerateNewId().ToString(),
+                OwnerId = "321",
+                Quantity = 50,
+                Price = 100,
+                Symbol = "ABC",
+                OrderType = OrderType.MarketSell
+            };
+
+            var account = new Account
+            {
+                Id = "123",
+                Portfolio = new Portfolio()
+            };
+
+            var sellerAccount = new Account
+            {
+                Id = "321",
+                Portfolio = new Portfolio()
+                {
+                    Stocks = new List<Stock>
+                    {
+                        new Stock
+                        {
+                            Symbol = "ABC",
+                            Orders = new List<string>
+                            {
+                                sellOrderOne.Id,
+                            }
+                        }
+                    }
+                }
+            };
+
+            var order = new Order
+            {
+                OrderType = OrderType.MarketBuy,
+                OwnerId = "123",
+                Symbol = "ABC",
+                Quantity = 100,
+                Price = 100,
+            };
+            var ticker = new Ticker
+            {
+                Symbol = "ABC",
+                BuyOrders = new List<Order>(),
+                SellOrders = new List<Order>
+                {
+                    sellOrderOne,
+                },
+            };
+
+            _accountsViewModel.Setup(x => x.GetAccount("123")).ReturnsAsync(account);
+            _accountsViewModel.Setup(x => x.GetAccount("321")).ReturnsAsync(sellerAccount);
+            _tickerViewModel.Setup(x => x.GetTicker("ABC")).ReturnsAsync(ticker);
+
+            var result = await _sut.AddOrder(order.Symbol, order.Price, order.Quantity, order.OrderType, "123");
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(ticker.BuyOrders.Count, Is.EqualTo(1));
+            Assert.That(ticker.SellOrders.Count, Is.EqualTo(1));
+            Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.EqualTo(1));
+            Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").OrderHistory.Count, Is.Zero);
+            Assert.That(sellerAccount.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.EqualTo(1));
+        }
+
 
         [Test]
         public async Task TestAddOrderLimitBuy()
@@ -210,8 +286,9 @@ namespace WGMansion.Api.UnitTests.ViewModels
             _accountsViewModel.Setup(x => x.GetAccount("321")).ReturnsAsync(sellerAccount);
             _tickerViewModel.Setup(x => x.GetTicker("ABC")).ReturnsAsync(ticker);
 
-            var result = await _sut.AddOrder(order, "123");
+            var result = await _sut.AddOrder(order.Symbol, order.Price, order.Quantity, order.OrderType, "123");
 
+            _tickerHistoryViewModel.Verify(x => x.AddOrderToHistory(It.IsAny<List<Order>>()), Times.Once);
             Assert.That(result, Is.Not.Null);
             Assert.That(ticker.BuyOrders.Count, Is.EqualTo(1));
             Assert.That(ticker.SellOrders.Count, Is.EqualTo(1));
@@ -221,6 +298,7 @@ namespace WGMansion.Api.UnitTests.ViewModels
             Assert.That(sellerAccount.Portfolio.Money, Is.EqualTo(5000));
             Assert.That(account.Portfolio.Stocks.Any(x => x.Symbol == "ABC"));
             Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.EqualTo(1));
+            Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").OrderHistory.Count, Is.EqualTo(0));
             Assert.That(sellerAccount.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.EqualTo(1));
         }
 
@@ -296,18 +374,20 @@ namespace WGMansion.Api.UnitTests.ViewModels
             _accountsViewModel.Setup(x => x.GetAccount("321")).ReturnsAsync(sellerAccount);
             _tickerViewModel.Setup(x => x.GetTicker("ABC")).ReturnsAsync(ticker);
 
-            var result = await _sut.AddOrder(order, "123");
+            var result = await _sut.AddOrder(order.Symbol, order.Price, order.Quantity, order.OrderType, "123");
 
+            _tickerHistoryViewModel.Verify(x => x.AddOrderToHistory(It.IsAny<List<Order>>()), Times.Once);
             Assert.That(result, Is.Not.Null);
-            Assert.That(ticker.SellOrders.Count == 0);
-            Assert.That(ticker.BuyOrders.Count == 1);
+            Assert.That(ticker.SellOrders.Count, Is.Zero);
+            Assert.That(ticker.BuyOrders.Count, Is.EqualTo(1));
             Assert.That(ticker.BuyOrders.First().Quantity, Is.EqualTo(25));
             Assert.That(ticker.BuyOrders.First().Price, Is.EqualTo(80));
             Assert.That(account.Portfolio.Money, Is.EqualTo(9500));
             Assert.That(sellerAccount.Portfolio.Money, Is.EqualTo(-9500));
             Assert.That(account.Portfolio.Stocks.Any(x => x.Symbol == "ABC"));
-            Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count == 0);
-            Assert.That(sellerAccount.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count == 1);
+            Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.Zero);
+            Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").OrderHistory.Count, Is.EqualTo(1));
+            Assert.That(sellerAccount.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -383,19 +463,21 @@ namespace WGMansion.Api.UnitTests.ViewModels
             _accountsViewModel.Setup(x => x.GetAccount("321")).ReturnsAsync(sellerAccount);
             _tickerViewModel.Setup(x => x.GetTicker("ABC")).ReturnsAsync(ticker);
 
-            var result = await _sut.AddOrder(order, "123");
+            var result = await _sut.AddOrder(order.Symbol, order.Price, order.Quantity, order.OrderType, "123");
 
+            _tickerHistoryViewModel.Verify(x => x.AddOrderToHistory(It.IsAny<List<Order>>()), Times.Once);
             Assert.That(result, Is.Not.Null);
-            Assert.That(ticker.SellOrders.Count == 1);
-            Assert.That(ticker.BuyOrders.Count == 1);
+            Assert.That(ticker.SellOrders.Count, Is.EqualTo(1));
+            Assert.That(ticker.BuyOrders.Count, Is.EqualTo(1));
             Assert.That(ticker.BuyOrders.First().Quantity, Is.EqualTo(50));
             Assert.That(ticker.BuyOrders.First().Price, Is.EqualTo(80));
             Assert.That(ticker.SellOrders.First().Quantity, Is.EqualTo(25));
             Assert.That(account.Portfolio.Money, Is.EqualTo(7500));
             Assert.That(sellerAccount.Portfolio.Money, Is.EqualTo(-7500));
             Assert.That(account.Portfolio.Stocks.Any(x => x.Symbol == "ABC"));
-            Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count == 1);
-            Assert.That(sellerAccount.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count == 1);
+            Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.EqualTo(1));
+            Assert.That(account.Portfolio.Stocks.First(x => x.Symbol == "ABC").OrderHistory.Count, Is.Zero);
+            Assert.That(sellerAccount.Portfolio.Stocks.First(x => x.Symbol == "ABC").Orders.Count, Is.EqualTo(1));
         }
 
         [Test]

@@ -12,6 +12,7 @@ namespace WGMansion.Api.ViewModels
         Task<Account> CreateAccount(string username, string password, string email);
         Task<Account> GetAccount(string id);
         Task<Account> UpdateAccount(Account account);
+        Task<List<Account>> UpdateAccount(List<Account> account);
     }
 
     public class AccountsViewModel : IAccountsViewModel
@@ -84,6 +85,15 @@ namespace WGMansion.Api.ViewModels
             _mongoService.SetCollection(ACCOUNTS_COLLECTION);
             await _mongoService.ReplaceOneAsync(account);
             return account;
+        }
+
+        public async Task<List<Account>> UpdateAccount(List<Account> accountsToUpdate)
+        {
+            foreach (var account in accountsToUpdate.Distinct())
+            {
+                await UpdateAccount(account);
+            }
+            return accountsToUpdate;
         }
     }
 }
