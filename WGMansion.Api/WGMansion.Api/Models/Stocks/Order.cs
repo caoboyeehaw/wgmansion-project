@@ -29,6 +29,6 @@ namespace WGMansion.Api.Models.Ticker
         [BsonElement("postDate")]
         public DateTime PostDate { get; set; }
         [BsonElement("fulfillDate")]
-        public DateTime FulfillDate { get; set; }
+        public DateTime? FulfillDate { get; set; } = null;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using log4net;
 using MongoDB.Bson;
+using System.Security.AccessControl;
 using WGMansion.Api.Models;
 using WGMansion.Api.Models.Ticker;
 
@@ -7,7 +8,7 @@ namespace WGMansion.Api.ViewModels
 {
     public interface IOrderViewModel
     {
-        Task<Order> AddOrder(Order order, string userId);
+        Task<Order> AddOrder(string symbol, float price, int quantity, string userId, OrderType orderType);
         Task WithdrawOrder(string orderId, string tickerSymbol, string userId);
     }
 
@@ -25,11 +26,19 @@ namespace WGMansion.Api.ViewModels
             _tickerHistoryViewModel = tickerHistoryViewModel;
         }
 
-        public async Task<Order> AddOrder(Order order, string userId)
+        public async Task<Order> AddOrder(string symbol, float price, int quantity, string userId, OrderType orderType)
         {
-            order.Id = ObjectId.GenerateNewId().ToString();
-            order.PostDate = DateTime.UtcNow;
-            order.OwnerId = userId;
+            var order = new Order
+            {
+                Id = ObjectId.GenerateNewId().ToString(),
+                OrderType = orderType,
+                Symbol = symbol,
+                Price= price,
+                Quantity = quantity,
+                MaxQuantity = quantity,
+                PostDate = DateTime.UtcNow,
+                OwnerId = userId
+            };
 
             var account = await _accountsViewModel.GetAccount(userId);
             var ticker = await _tickerViewModel.GetTicker(order.Symbol);
@@ -38,10 +47,10 @@ namespace WGMansion.Api.ViewModels
             if (ticker == null) throw new Exception($"Ticker {order.Symbol} not found");
 
             AddOrderToStock(order, account);
+            await _accountsViewModel.UpdateAccount(account);
             ProcessOrderOnTicker(order, ticker);
 
             await _tickerViewModel.UpdateTicker(ticker);
-            await _accountsViewModel.UpdateAccount(account);
 
             return order;
         }
@@ -136,8 +145,8 @@ namespace WGMansion.Api.ViewModels
             var seller = await _accountsViewModel.GetAccount(sellOrder.OwnerId);
             var difference = Math.Min(buyOrder.Quantity, sellOrder.Quantity);
 
-            buyer.Portfolio.Money -= difference * sellOrder.Price;
-            seller.Portfolio.Money += difference * sellOrder.Price;
+            UpdatePortfolioStock(buyer, sellOrder.Price, difference, buyOrder.Symbol);
+            UpdatePortfolioStock(seller, sellOrder.Price, -difference, buyOrder.Symbol);
 
             buyOrder.Quantity -= difference;
             sellOrder.Quantity -= difference;
@@ -149,6 +158,14 @@ namespace WGMansion.Api.ViewModels
             accountsToUpdate.Add(seller);
 
             _logger.Info($"{buyer.UserName} buys {difference} of {ticker.Symbol} from {seller.UserName} at {sellOrder.Price}");
+        }
+
+        private void UpdatePortfolioStock(Account account, float price, int quantity, string symbol)
+        {
+            var stock = account.Portfolio.Stocks.First(x=>x.Symbol == symbol);
+            stock.AveragePrice = (stock.AveragePrice * stock.Quantity + price * quantity) / (quantity + stock.Quantity);
+            stock.Quantity += quantity;
+            account.Portfolio.Money -= price * quantity;
         }
 
         private void RemoveOrderIfFulfilled(Order order, Account account, Ticker ticker, List<Order> orderHistory)

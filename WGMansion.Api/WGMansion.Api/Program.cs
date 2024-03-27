@@ -3,6 +3,7 @@ using log4net.Config;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Converters;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
@@ -25,6 +26,12 @@ internal class Program
         _logger.Info($"--------Starting Server--------");
 
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddControllersWithViews()
+            .AddNewtonsoftJson(options =>
+            options.SerializerSettings.Converters.Add(new StringEnumConverter()));
+        builder.Services.AddSwaggerGenNewtonsoftSupport();
+
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
