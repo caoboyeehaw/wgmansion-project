@@ -16,16 +16,19 @@ namespace WGMansion.Api.ViewModels
         private readonly ILog _logger = LogManager.GetLogger(typeof(OrderViewModel));
         private readonly IAccountsViewModel _accountsViewModel;
         private readonly ITickerViewModel _tickerViewModel;
+        private readonly ITickerHistoryViewModel _tickerHistoryViewModel;
 
-        public OrderViewModel(IAccountsViewModel accountsViewModel, ITickerViewModel tickerViewModel)
+        public OrderViewModel(IAccountsViewModel accountsViewModel, ITickerViewModel tickerViewModel, ITickerHistoryViewModel tickerHistoryViewModel)
         {
             _accountsViewModel = accountsViewModel;
             _tickerViewModel = tickerViewModel;
+            _tickerHistoryViewModel = tickerHistoryViewModel;
         }
 
         public async Task<Order> AddOrder(Order order, string userId)
         {
             order.Id = ObjectId.GenerateNewId().ToString();
+            order.PostDate = DateTime.UtcNow;
             order.OwnerId = userId;
 
             var account = await _accountsViewModel.GetAccount(userId);
@@ -69,22 +72,22 @@ namespace WGMansion.Api.ViewModels
             {
                 case OrderType.MarketBuy:
                     ticker.BuyOrders.Add(order);
-                    var sellOrders = ticker.SellOrders.OrderBy(x => x.Price).ToList();
+                    var sellOrders = ticker.SellOrders.Where(x => x.OrderType != OrderType.MarketSell).OrderBy(x => x.Price).ToList();
                     await BuyOrder(order, sellOrders, ticker);
                     break;
                 case OrderType.LimitBuy:
                     ticker.BuyOrders.Add(order);
-                    var limitSellOrders = ticker.SellOrders.Where(x => x.Price <= order.Price).OrderBy(x => x.Price).ToList();
+                    var limitSellOrders = ticker.SellOrders.Where(x => x.Price <= order.Price || order.OrderType == OrderType.MarketSell).OrderBy(x => x.Price).ToList();
                     await BuyOrder(order, limitSellOrders, ticker);
                     break;
                 case OrderType.MarketSell:
                     ticker.SellOrders.Add(order);
-                    var buyOrders = ticker.BuyOrders.OrderByDescending(x => x.Price).ToList();
+                    var buyOrders = ticker.BuyOrders.Where(x => x.OrderType != OrderType.MarketBuy).OrderByDescending(x => x.Price).ToList();
                     await SellOrder(order, buyOrders, ticker);
                     break;
                 case OrderType.LimitSell:
                     ticker.SellOrders.Add(order);
-                    var limitBuyOrders = ticker.BuyOrders.Where(x => x.Price >= order.Price).OrderByDescending(x => x.Price).ToList();
+                    var limitBuyOrders = ticker.BuyOrders.Where(x => x.Price >= order.Price || order.OrderType == OrderType.MarketBuy).OrderByDescending(x => x.Price).ToList();
                     await SellOrder(order, limitBuyOrders, ticker);
                     break;
                 default:
@@ -95,24 +98,28 @@ namespace WGMansion.Api.ViewModels
         private async Task BuyOrder(Order buyOrder, List<Order> sellOrders, Ticker ticker)
         {
             var accountsToUpdate = new List<Account>();
+            var orderHistory = new List<Order>();
             while (sellOrders.Count > 0 && buyOrder.Quantity > 0)
             {
-                await FulfillOrder(buyOrder, sellOrders[0], ticker, accountsToUpdate);
+                await FulfillOrder(buyOrder, sellOrders[0], ticker, accountsToUpdate, orderHistory);
                 sellOrders.RemoveAll(x => x.Quantity == 0);
             }
             await UpdateAllAccounts(accountsToUpdate);
+            await _tickerHistoryViewModel.AddOrderToHistory(orderHistory);
         }
 
         private async Task SellOrder(Order sellOrder, List<Order> buyOrders, Ticker ticker)
         {
             var accountsToUpdate = new List<Account>();
+            var orderHistory = new List<Order>();
             while (buyOrders.Count > 0 && sellOrder.Quantity > 0)
             {
                 sellOrder.Price = buyOrders[0].Price;
-                await FulfillOrder(buyOrders[0], sellOrder, ticker, accountsToUpdate);
+                await FulfillOrder(buyOrders[0], sellOrder, ticker, accountsToUpdate, orderHistory);
                 buyOrders.RemoveAll(x => x.Quantity == 0);
             }
             await UpdateAllAccounts(accountsToUpdate);
+            await _tickerHistoryViewModel.AddOrderToHistory(orderHistory);
         }
 
         private async Task UpdateAllAccounts(List<Account> accountsToUpdate)
@@ -123,7 +130,7 @@ namespace WGMansion.Api.ViewModels
             }
         }
 
-        private async Task FulfillOrder(Order buyOrder, Order sellOrder, Ticker ticker, List<Account> accountsToUpdate)
+        private async Task FulfillOrder(Order buyOrder, Order sellOrder, Ticker ticker, List<Account> accountsToUpdate, List<Order> orderHistory)
         {
             var buyer = await _accountsViewModel.GetAccount(buyOrder.OwnerId);
             var seller = await _accountsViewModel.GetAccount(sellOrder.OwnerId);
@@ -135,8 +142,8 @@ namespace WGMansion.Api.ViewModels
             buyOrder.Quantity -= difference;
             sellOrder.Quantity -= difference;
 
-            RemoveOrderIfFulfilled(buyOrder, buyer, ticker);
-            RemoveOrderIfFulfilled(sellOrder, seller, ticker);
+            RemoveOrderIfFulfilled(buyOrder, buyer, ticker, orderHistory);
+            RemoveOrderIfFulfilled(sellOrder, seller, ticker, orderHistory);
 
             accountsToUpdate.Add(buyer);
             accountsToUpdate.Add(seller);
@@ -144,10 +151,14 @@ namespace WGMansion.Api.ViewModels
             _logger.Info($"{buyer.UserName} buys {difference} of {ticker.Symbol} from {seller.UserName} at {sellOrder.Price}");
         }
 
-        private void RemoveOrderIfFulfilled(Order order, Account account, Ticker ticker) //TODO: record order history
+        private void RemoveOrderIfFulfilled(Order order, Account account, Ticker ticker, List<Order> orderHistory)
         {
             if (order.Quantity != 0) return;
-            account.Portfolio.Stocks.First(x => x.Symbol == order.Symbol).Orders.Remove(order.Id);
+            order.FulfillDate = DateTime.UtcNow;
+            var portfolioStock = account.Portfolio.Stocks.First(x => x.Symbol == order.Symbol);
+            portfolioStock.Orders.Remove(order.Id);
+            portfolioStock.OrderHistory.Add(order);
+
             if (order.OrderType == OrderType.MarketBuy || order.OrderType == OrderType.LimitBuy)
             {
                 ticker.BuyOrders.Remove(order);
@@ -156,6 +167,7 @@ namespace WGMansion.Api.ViewModels
             {
                 ticker.SellOrders.Remove(order);
             }
+            orderHistory.Add(order);
             _logger.Info($"{order.Id} fulfilled and removed");
         }
 
