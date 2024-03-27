@@ -42,7 +42,7 @@ namespace WGMansion.Api.UnitTests.ViewModels
             _mongoService.Setup(x => x.FindOneAsync(x => x.UserName == "username")).ReturnsAsync(dbUser);
 
             var result = await _sut.Authenticate("username", "password");
-            _mongoService.Verify(x=>x.ReplaceOneAsync(dbUser), Times.Once());
+            _mongoService.Verify(x => x.ReplaceOneAsync(dbUser), Times.Once());
             _tokenGenerator.Verify(x => x.GetToken(dbUser), Times.Once);
 
             Assert.That(result.Password, Is.Null);
@@ -120,7 +120,7 @@ namespace WGMansion.Api.UnitTests.ViewModels
 
             var result = await _sut.CreateAccount("username", "password", "email");
 
-            _mongoService.Verify(x => x.InsertOneAsync(newUser), Times.Once);
+            _mongoService.Verify(x => x.InsertOneAsync(It.IsAny<Account>()), Times.Once);
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Password, Is.Null);

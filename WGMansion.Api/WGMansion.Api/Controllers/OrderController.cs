@@ -30,7 +30,7 @@ namespace WGMansion.Api.Controllers
             try
             {
                 _logger.Info($"Adding order: {symbol} {orderType} ${price} #{quantity}");
-                var result = await _orderViewModel.AddOrder(symbol, price, quantity, GetUserId(), orderType);
+                var result = await _orderViewModel.AddOrder(symbol, price, quantity, orderType, GetUserId());
                 return Ok(result);
             }
             catch (Exception e)

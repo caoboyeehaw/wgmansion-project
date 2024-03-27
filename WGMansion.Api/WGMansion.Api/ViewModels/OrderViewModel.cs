@@ -1,6 +1,5 @@
 ﻿using log4net;
 using MongoDB.Bson;
-using System.Security.AccessControl;
 using WGMansion.Api.Models;
 using WGMansion.Api.Models.Ticker;
 
@@ -8,7 +7,7 @@ namespace WGMansion.Api.ViewModels
 {
     public interface IOrderViewModel
     {
-        Task<Order> AddOrder(string symbol, float price, int quantity, string userId, OrderType orderType);
+        Task<Order> AddOrder(string symbol, float price, int quantity, OrderType orderType, string userId);
         Task WithdrawOrder(string orderId, string tickerSymbol, string userId);
     }
 
@@ -26,14 +25,14 @@ namespace WGMansion.Api.ViewModels
             _tickerHistoryViewModel = tickerHistoryViewModel;
         }
 
-        public async Task<Order> AddOrder(string symbol, float price, int quantity, string userId, OrderType orderType)
+        public async Task<Order> AddOrder(string symbol, float price, int quantity, OrderType orderType, string userId)
         {
             var order = new Order
             {
                 Id = ObjectId.GenerateNewId().ToString(),
                 OrderType = orderType,
                 Symbol = symbol,
-                Price= price,
+                Price = price,
                 Quantity = quantity,
                 MaxQuantity = quantity,
                 PostDate = DateTime.UtcNow,
@@ -113,7 +112,7 @@ namespace WGMansion.Api.ViewModels
                 await FulfillOrder(buyOrder, sellOrders[0], ticker, accountsToUpdate, orderHistory);
                 sellOrders.RemoveAll(x => x.Quantity == 0);
             }
-            await UpdateAllAccounts(accountsToUpdate);
+            await _accountsViewModel.UpdateAccount(accountsToUpdate);
             await _tickerHistoryViewModel.AddOrderToHistory(orderHistory);
         }
 
@@ -127,16 +126,8 @@ namespace WGMansion.Api.ViewModels
                 await FulfillOrder(buyOrders[0], sellOrder, ticker, accountsToUpdate, orderHistory);
                 buyOrders.RemoveAll(x => x.Quantity == 0);
             }
-            await UpdateAllAccounts(accountsToUpdate);
+            await _accountsViewModel.UpdateAccount(accountsToUpdate);
             await _tickerHistoryViewModel.AddOrderToHistory(orderHistory);
-        }
-
-        private async Task UpdateAllAccounts(List<Account> accountsToUpdate)
-        {
-            foreach (var account in accountsToUpdate.Distinct())
-            {
-                await _accountsViewModel.UpdateAccount(account);
-            }
         }
 
         private async Task FulfillOrder(Order buyOrder, Order sellOrder, Ticker ticker, List<Account> accountsToUpdate, List<Order> orderHistory)
@@ -162,7 +153,7 @@ namespace WGMansion.Api.ViewModels
 
         private void UpdatePortfolioStock(Account account, float price, int quantity, string symbol)
         {
-            var stock = account.Portfolio.Stocks.First(x=>x.Symbol == symbol);
+            var stock = account.Portfolio.Stocks.First(x => x.Symbol == symbol);
             stock.AveragePrice = (stock.AveragePrice * stock.Quantity + price * quantity) / (quantity + stock.Quantity);
             stock.Quantity += quantity;
             account.Portfolio.Money -= price * quantity;
