@@ -13,10 +13,29 @@ namespace WGMansion.Api.Controllers
     {
         private readonly ILog _logger = LogManager.GetLogger(typeof(AccountsController));
         private IAccountsViewModel _accountsViewModel;
+        public Func<string> GetUserId;
 
         public AccountsController(IAccountsViewModel accountsViewModel)
         {
             _accountsViewModel = accountsViewModel;
+            GetUserId = () => User.Identity.Name;
+        }
+
+        [HttpGet]
+        [Route("/getaccount")]
+        public async Task<ActionResult<Account>> GetAccount()
+        {
+            try
+            {
+                _logger.Info($"Getting account {GetUserId()}");
+                var result = await _accountsViewModel.GetAccount(GetUserId());
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                _logger.Error(e);
+                return BadRequest(e);
+            }
         }
 
         [AllowAnonymous]
@@ -40,12 +59,12 @@ namespace WGMansion.Api.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("/createuser")]
-        public async Task<ActionResult<Account>> CreateUser(string username, string password)
+        public async Task<ActionResult<Account>> CreateUser(string username, string password, string email)
         {
             try
             {
                 _logger.Info($"Creating User: {username}");
-                var result = await _accountsViewModel.CreateAccount(username, password);
+                var result = await _accountsViewModel.CreateAccount(username, password, email);
                 _logger.Info($"Created {result.Id}");
                 return Ok(result);
             }

@@ -31,11 +31,5 @@ namespace WGMansion.Api.Controllers
                 return BadRequest(e.ToString());
             }
         }
-        [HttpGet]
-        [Route("/test")]
-        public ActionResult<string> Test()
-        {
-            return Ok("Ok");
-        }
     }
 }
