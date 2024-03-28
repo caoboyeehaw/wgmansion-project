@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WGMansion.Api.Models;
+using WGMansion.Api.Utility;
 using WGMansion.Api.ViewModels;
 
 namespace WGMansion.Api.Controllers
@@ -67,6 +68,23 @@ namespace WGMansion.Api.Controllers
                 var result = await _accountsViewModel.CreateAccount(username, password, email);
                 _logger.Info($"Created {result.Id}");
                 return Ok(result);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.ToString());
+                return BadRequest(e.ToString());
+            }
+        }
+
+        [HttpPost]
+        [Route("/changepicture")]
+        public async Task<ActionResult<string>> ChangeProfilePicture(IFormFile image)
+        {
+            try
+            {
+                var result = await _accountsViewModel.ChangeProfilePicture(image, GetUserId());
+                return Ok(result);
+
             }
             catch (Exception e)
             {
