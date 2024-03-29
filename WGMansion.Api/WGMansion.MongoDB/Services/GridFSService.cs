@@ -42,5 +42,10 @@ namespace WGMansion.MongoDB.Services
             var result = await _bucket.DownloadAsBytesAsync(ObjectId.Parse(id));
             return result;
         }
+
+        public async Task DeleteAsync(string id)
+        {
+            await _bucket.DeleteAsync(ObjectId.Parse(id));
+        }
     }
 }

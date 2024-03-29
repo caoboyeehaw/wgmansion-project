@@ -48,7 +48,6 @@ namespace WGMansion.Api.ViewModels
             AddOrderToStock(order, account);
             await _accountsViewModel.UpdateAccount(account);
             ProcessOrderOnTicker(order, ticker);
-
             await _tickerViewModel.UpdateTicker(ticker);
 
             return order;

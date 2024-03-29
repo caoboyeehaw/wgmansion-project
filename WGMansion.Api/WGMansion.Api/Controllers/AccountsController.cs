@@ -78,6 +78,7 @@ namespace WGMansion.Api.Controllers
 
         [HttpPost]
         [Route("/changepicture")]
+        [RequestSizeLimit(1_000_000)]
         public async Task<ActionResult<string>> ChangeProfilePicture(IFormFile image)
         {
             try

@@ -14,15 +14,17 @@ namespace WGMansion.Api.Controllers
     {
         private ILog _logger = LogManager.GetLogger(typeof(ImageController));
         private readonly IImageViewModel _imageViewModel;
+        public Func<string> GetUserId;
 
         public ImageController(IImageViewModel imageViewModel) 
         {
             _imageViewModel = imageViewModel;
+            GetUserId = () => User.Identity.Name;
         }
 
         [HttpGet]
         [Route("/getimage")]
-        public async Task<ActionResult> GetImage(string id)
+        public async Task<ActionResult<byte[]>> GetImage(string id)
         {
             try
             {
@@ -30,6 +32,40 @@ namespace WGMansion.Api.Controllers
                 return File(result, "image/png");
             }
             catch (Exception e) {
+                _logger.Error(e.ToString());
+                return BadRequest(e.ToString());
+            }
+        }
+
+        [Authorize(Roles=Roles.Admin)]
+        [HttpPost]
+        [Route("/postimage")]
+        public async Task<ActionResult<string>> PostImage(IFormFile image)
+        {
+            try
+            {
+                var result = await _imageViewModel.PostImage(image, GetUserId());
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.ToString());
+                return BadRequest(e.ToString());
+            }
+        }
+
+        [Authorize(Roles = Roles.Admin)]
+        [HttpPost]
+        [Route("/deleteimage")]
+        public async Task<ActionResult<string>> DeleteImage(string id)
+        {
+            try
+            {
+                await _imageViewModel.DeleteImage(id);
+                return Ok($"Image {id} deleted");
+            }
+            catch (Exception e)
+            {
                 _logger.Error(e.ToString());
                 return BadRequest(e.ToString());
             }

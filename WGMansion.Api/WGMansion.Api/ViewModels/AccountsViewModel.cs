@@ -21,15 +21,15 @@ namespace WGMansion.Api.ViewModels
         private readonly ILog _logger = LogManager.GetLogger(typeof(AccountsViewModel));
         private readonly IMongoService<Account> _mongoService;
         private readonly ITokenGenerator _tokenGenerator;
-        private readonly IGridFSService _gridFSService;
+        private readonly IImageViewModel _imageViewModel;
         private const string TYPE_VALUE = "User";
         private const string ACCOUNTS_COLLECTION = "accounts";
 
-        public AccountsViewModel(IMongoService<Account> mongoService, ITokenGenerator tokenGenerator, IGridFSService gridFSService)
+        public AccountsViewModel(IMongoService<Account> mongoService, ITokenGenerator tokenGenerator, IImageViewModel imageViewModel)
         {
             _mongoService = mongoService;
             _tokenGenerator = tokenGenerator;
-            _gridFSService = gridFSService;
+            _imageViewModel = imageViewModel;
         }
 
         public async Task<Account> Authenticate(string username, string password)
@@ -103,8 +103,9 @@ namespace WGMansion.Api.ViewModels
         public async Task<string> ChangeProfilePicture(IFormFile image, string userId)
         {
             var account = await GetAccount(userId);
-            var bytes = await image.GetBytesAsync();
-            var result = await _gridFSService.UploadFromBytesAsync(userId, bytes);
+            var result = await _imageViewModel.PostImage(image, userId);
+            if (!string.IsNullOrEmpty(account.ProfilePictureId)) 
+                await _imageViewModel.DeleteImage(account.ProfilePictureId);
             account.ProfilePictureId = result;
             await UpdateAccount(account);
             return result;

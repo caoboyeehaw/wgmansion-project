@@ -14,15 +14,17 @@ namespace WGMansion.Api.UnitTests.ViewModels
         private AccountsViewModel _sut;
         private Mock<IMongoService<Account>> _mongoService;
         private Mock<ITokenGenerator> _tokenGenerator;
+        private Mock<IImageViewModel> _imageViewModel;
 
         [SetUp]
         public void Setup()
         {
             _mongoService = new Mock<IMongoService<Account>>();
             _tokenGenerator = new Mock<ITokenGenerator>();
-
             _tokenGenerator.Setup(x => x.GetToken(It.IsAny<Account>())).Returns("new token");
-            _sut = new AccountsViewModel(_mongoService.Object, _tokenGenerator.Object);
+            _imageViewModel = new Mock<IImageViewModel>();
+
+            _sut = new AccountsViewModel(_mongoService.Object, _tokenGenerator.Object, _imageViewModel.Object);
         }
 
         [Test]
