@@ -25,9 +25,15 @@ namespace WGMansion.Api.UnitTests.Controllers
         [Test]
         public async Task TestAddOrder()
         {
-            var order = new Order();
+            var order = new Order()
+            {
+                Symbol = "ABC",
+                Price = 100,
+                Quantity = 100,
+                OrderType = OrderType.MarketBuy
+            };
             _orderViewModel.Setup(x => x.AddOrder(It.IsAny<string>(), It.IsAny<float>(), It.IsAny<int>(), It.IsAny<OrderType>(), "123")).ReturnsAsync(order);
-            var result = await _sut.AddOrder("ABC", 100, 100, OrderType.MarketBuy);
+            var result = await _sut.AddOrder(order);
             var okResult = result.Result as OkObjectResult;
 
             Assert.That(result, Is.Not.Null);
@@ -37,8 +43,15 @@ namespace WGMansion.Api.UnitTests.Controllers
         [Test]
         public async Task TestAddOrderException()
         {
+            var order = new Order()
+            {
+                Symbol = "ABC",
+                Price = 100,
+                Quantity = 100,
+                OrderType = OrderType.MarketBuy
+            };
             _orderViewModel.Setup(x => x.AddOrder(It.IsAny<string>(), It.IsAny<float>(), It.IsAny<int>(), It.IsAny<OrderType>(), It.IsAny<string>())).ThrowsAsync(new Exception());
-            var result = await _sut.AddOrder("ABC", 100f, 100, OrderType.MarketBuy);
+            var result = await _sut.AddOrder(order);
             var badResult = result.Result as BadRequestObjectResult;
 
             Assert.That(result, Is.Not.Null);

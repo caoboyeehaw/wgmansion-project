@@ -8,18 +8,18 @@ namespace WGMansion.Api.Models.Ticker
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string? Id { get; set; }
         [BsonElement("type")]
         public string Type { get; set; } = "order";
         [BsonElement("active")]
         public bool Active { get; set; } = true;
         [BsonElement("ownerId")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string OwnerId { get; set; }
+        public string? OwnerId { get; set; }
         [BsonElement("orderType")]
         public OrderType OrderType { get; set; }
         [BsonElement("symbol")]
-        public string Symbol { get; set; }
+        public string? Symbol { get; set; }
         [BsonElement("price")]
         public float Price { get; set; }
         [BsonElement("quantity")]
@@ -29,6 +29,6 @@ namespace WGMansion.Api.Models.Ticker
         [BsonElement("postDate")]
         public DateTime PostDate { get; set; }
         [BsonElement("fulfillDate")]
-        public DateTime? FulfillDate { get; set; } = null;
+        public DateTime FulfillDate { get; set; } = DateTime.MinValue;
     }
 }

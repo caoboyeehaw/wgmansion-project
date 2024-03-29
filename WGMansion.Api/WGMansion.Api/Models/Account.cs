@@ -9,21 +9,21 @@ namespace WGMansion.Api.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string? Id { get; set; }
         [BsonElement("type")]
         public string Type { get; set; } = "account";
         [BsonElement("active")]
         public bool Active { get; set; } = true;
         [BsonElement("username")]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
         [BsonElement("password")]
         public string? Password { get; set; }
         [BsonElement("email")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
         [BsonElement("profilePictureId")]
-        public string ProfilePictureId { get; set; }
+        public string? ProfilePictureId { get; set; }
         [BsonElement("role")]
-        public string Role { get; set; }
+        public string? Role { get; set; }
         [BsonElement("creationDate")]
         public DateTime CreationDate { get; set; }
         [BsonElement("lastLogin")]

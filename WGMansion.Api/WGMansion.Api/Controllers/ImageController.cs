@@ -1,6 +1,5 @@
 ﻿using log4net;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WGMansion.Api.Models;
 using WGMansion.Api.ViewModels;
@@ -16,7 +15,7 @@ namespace WGMansion.Api.Controllers
         private readonly IImageViewModel _imageViewModel;
         public Func<string> GetUserId;
 
-        public ImageController(IImageViewModel imageViewModel) 
+        public ImageController(IImageViewModel imageViewModel)
         {
             _imageViewModel = imageViewModel;
             GetUserId = () => User.Identity.Name;
@@ -31,13 +30,14 @@ namespace WGMansion.Api.Controllers
                 var result = await _imageViewModel.GetImage(id);
                 return File(result, "image/png");
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 _logger.Error(e.ToString());
                 return BadRequest(e.ToString());
             }
         }
 
-        [Authorize(Roles=Roles.Admin)]
+        [Authorize(Roles = Roles.Admin)]
         [HttpPost]
         [Route("/postimage")]
         public async Task<ActionResult<string>> PostImage(IFormFile image)

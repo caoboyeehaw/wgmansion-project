@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WGMansion.Api.Controllers;
 using WGMansion.Api.ViewModels;
 
@@ -39,7 +33,7 @@ namespace WGMansion.Api.UnitTests.Controllers
         }
 
         [Test]
-        public  async Task TestGetImageException()
+        public async Task TestGetImageException()
         {
             _imageViewModel.Setup(x => x.GetImage(It.IsAny<string>())).ThrowsAsync(new Exception());
             var result = await _sut.GetImage("123");

@@ -9,13 +9,13 @@ namespace WGMansion.Api.Models.Stocks
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string? Id { get; set; }
         [BsonElement("type")]
         public string Type { get; set; } = "ticker_history";
         [BsonElement("active")]
         public bool Active { get; set; }
         [BsonElement("symbol")]
-        public string Symbol { get; set; }
+        public string? Symbol { get; set; }
         [BsonElement("orders")]
         public List<Order> Orders { get; set; } = new List<Order>();
 

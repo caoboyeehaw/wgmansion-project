@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WGMansion.Api.ViewModels;
 using WGMansion.MongoDB.Services;
 
@@ -55,7 +50,7 @@ namespace WGMansion.Api.UnitTests.ViewModels
             image.Setup(x => x.FileName).Returns("123.exe");
             _gridFSService.Setup(x => x.UploadFromBytesAsync(It.IsAny<string>(), It.IsAny<byte[]>())).ReturnsAsync("321");
 
-            var result = Assert.ThrowsAsync<Exception>(async ()=> await _sut.PostImage(image.Object, "123"));
+            var result = Assert.ThrowsAsync<Exception>(async () => await _sut.PostImage(image.Object, "123"));
 
             _gridFSService.Verify(x => x.UploadFromBytesAsync(It.IsAny<string>(), It.IsAny<byte[]>()), Times.Never);
             Assert.That(result.Message, Is.EqualTo($"File extension not allowed 123.exe"));

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WGMansion.Api.Models;
-using WGMansion.Api.Utility;
 using WGMansion.Api.ViewModels;
 
 namespace WGMansion.Api.Controllers
@@ -42,12 +41,12 @@ namespace WGMansion.Api.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("/authenticate")]
-        public async Task<ActionResult<Account>> Authenticate(string username, string password)
+        public async Task<ActionResult<Account>> Authenticate([FromBody] Account account)
         {
             try
             {
-                _logger.Info($"Authenticating User: {username}");
-                var document = await _accountsViewModel.Authenticate(username, password);
+                _logger.Info($"Authenticating User: {account.UserName}");
+                var document = await _accountsViewModel.Authenticate(account.UserName, account.Password);
                 return Ok(document);
             }
             catch (Exception e)
@@ -60,12 +59,12 @@ namespace WGMansion.Api.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("/createuser")]
-        public async Task<ActionResult<Account>> CreateUser(string username, string password, string email)
+        public async Task<ActionResult<Account>> CreateUser([FromBody] Account account)
         {
             try
             {
-                _logger.Info($"Creating User: {username}");
-                var result = await _accountsViewModel.CreateAccount(username, password, email);
+                _logger.Info($"Creating User: {account.UserName}");
+                var result = await _accountsViewModel.CreateAccount(account.UserName, account.Password, account.Email);
                 _logger.Info($"Created {result.Id}");
                 return Ok(result);
             }

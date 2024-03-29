@@ -7,7 +7,7 @@ namespace WGMansion.MongoDB.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string? Id { get; set; }
         [BsonElement("type")]
         public string Type { get; set; }
         [BsonElement("active")]

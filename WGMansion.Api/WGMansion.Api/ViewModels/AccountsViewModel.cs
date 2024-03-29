@@ -81,6 +81,7 @@ namespace WGMansion.Api.ViewModels
             _mongoService.SetCollection(ACCOUNTS_COLLECTION);
             var user = await _mongoService.FindByIdAsync(id);
             if (user == null) throw new Exception($"User {id} not found");
+            user.Password = null;
             return user;
         }
 
@@ -104,7 +105,7 @@ namespace WGMansion.Api.ViewModels
         {
             var account = await GetAccount(userId);
             var result = await _imageViewModel.PostImage(image, userId);
-            if (!string.IsNullOrEmpty(account.ProfilePictureId)) 
+            if (!string.IsNullOrEmpty(account.ProfilePictureId))
                 await _imageViewModel.DeleteImage(account.ProfilePictureId);
             account.ProfilePictureId = result;
             await UpdateAccount(account);
