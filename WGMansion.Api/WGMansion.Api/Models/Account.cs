@@ -20,6 +20,8 @@ namespace WGMansion.Api.Models
         public string? Password { get; set; }
         [BsonElement("email")]
         public string Email { get; set; }
+        [BsonElement("profilePictureId")]
+        public string ProfilePictureId { get; set; }
         [BsonElement("role")]
         public string Role { get; set; }
         [BsonElement("creationDate")]

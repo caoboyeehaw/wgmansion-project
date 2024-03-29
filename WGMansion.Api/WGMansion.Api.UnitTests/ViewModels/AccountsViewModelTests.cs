@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.AspNetCore.Http;
+using Moq;
 using System.Linq.Expressions;
 using WGMansion.Api.Models;
 using WGMansion.Api.Services;
@@ -14,15 +15,17 @@ namespace WGMansion.Api.UnitTests.ViewModels
         private AccountsViewModel _sut;
         private Mock<IMongoService<Account>> _mongoService;
         private Mock<ITokenGenerator> _tokenGenerator;
+        private Mock<IImageViewModel> _imageViewModel;
 
         [SetUp]
         public void Setup()
         {
             _mongoService = new Mock<IMongoService<Account>>();
             _tokenGenerator = new Mock<ITokenGenerator>();
-
             _tokenGenerator.Setup(x => x.GetToken(It.IsAny<Account>())).Returns("new token");
-            _sut = new AccountsViewModel(_mongoService.Object, _tokenGenerator.Object);
+            _imageViewModel = new Mock<IImageViewModel>();
+
+            _sut = new AccountsViewModel(_mongoService.Object, _tokenGenerator.Object, _imageViewModel.Object);
         }
 
         [Test]
@@ -140,5 +143,38 @@ namespace WGMansion.Api.UnitTests.ViewModels
             var result = Assert.ThrowsAsync<Exception>(async () => await _sut.CreateAccount("username", "password", "email"));
             Assert.That(result.Message, Is.EqualTo($"User already exists : {newUser.UserName}"));
         }
+
+        [Test]
+        public async Task TestChangeProfilePicture()
+        {
+            var account = new Account();
+            var image = new Mock<IFormFile>();
+            _mongoService.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(account);
+            _imageViewModel.Setup(x => x.PostImage(It.IsAny<IFormFile>(), It.IsAny<string>())).ReturnsAsync("imageid");
+
+            var result = await _sut.ChangeProfilePicture(image.Object, "userid");
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(account.ProfilePictureId, Is.EqualTo("imageid"));
+        }
+
+        [Test]
+        public async Task TestChangeProfilePictureDeleteExisting()
+        {
+            var account = new Account
+            {
+                ProfilePictureId = "oldimage"
+            };
+            var image = new Mock<IFormFile>();
+            _mongoService.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(account);
+            _imageViewModel.Setup(x => x.PostImage(It.IsAny<IFormFile>(), It.IsAny<string>())).ReturnsAsync("imageid");
+
+            var result = await _sut.ChangeProfilePicture(image.Object, "userid");
+            _imageViewModel.Verify(x => x.DeleteImage("oldimage"), Times.Once);
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(account.ProfilePictureId, Is.EqualTo("imageid"));
+        }
+
     }
 }

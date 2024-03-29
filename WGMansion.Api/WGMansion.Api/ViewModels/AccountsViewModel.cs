@@ -13,6 +13,7 @@ namespace WGMansion.Api.ViewModels
         Task<Account> GetAccount(string id);
         Task<Account> UpdateAccount(Account account);
         Task<List<Account>> UpdateAccount(List<Account> account);
+        Task<string> ChangeProfilePicture(IFormFile image, string userId);
     }
 
     public class AccountsViewModel : IAccountsViewModel
@@ -20,13 +21,15 @@ namespace WGMansion.Api.ViewModels
         private readonly ILog _logger = LogManager.GetLogger(typeof(AccountsViewModel));
         private readonly IMongoService<Account> _mongoService;
         private readonly ITokenGenerator _tokenGenerator;
+        private readonly IImageViewModel _imageViewModel;
         private const string TYPE_VALUE = "User";
         private const string ACCOUNTS_COLLECTION = "accounts";
 
-        public AccountsViewModel(IMongoService<Account> mongoService, ITokenGenerator tokenGenerator)
+        public AccountsViewModel(IMongoService<Account> mongoService, ITokenGenerator tokenGenerator, IImageViewModel imageViewModel)
         {
             _mongoService = mongoService;
             _tokenGenerator = tokenGenerator;
+            _imageViewModel = imageViewModel;
         }
 
         public async Task<Account> Authenticate(string username, string password)
@@ -77,6 +80,7 @@ namespace WGMansion.Api.ViewModels
         {
             _mongoService.SetCollection(ACCOUNTS_COLLECTION);
             var user = await _mongoService.FindByIdAsync(id);
+            if (user == null) throw new Exception($"User {id} not found");
             return user;
         }
 
@@ -94,6 +98,17 @@ namespace WGMansion.Api.ViewModels
                 await UpdateAccount(account);
             }
             return accountsToUpdate;
+        }
+
+        public async Task<string> ChangeProfilePicture(IFormFile image, string userId)
+        {
+            var account = await GetAccount(userId);
+            var result = await _imageViewModel.PostImage(image, userId);
+            if (!string.IsNullOrEmpty(account.ProfilePictureId)) 
+                await _imageViewModel.DeleteImage(account.ProfilePictureId);
+            account.ProfilePictureId = result;
+            await UpdateAccount(account);
+            return result;
         }
     }
 }

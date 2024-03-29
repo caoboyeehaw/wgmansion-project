@@ -63,12 +63,14 @@ internal class Program
         });
 
         builder.Services.AddSingleton(typeof(IMongoService<>), typeof(MongoService<>));
+        builder.Services.AddSingleton<IGridFSService, GridFSService>();
         builder.Services.AddTransient<ITokenGenerator, TokenGenerator>();
         builder.Services.AddTransient<IAccountsViewModel, AccountsViewModel>();
         builder.Services.AddTransient<ITickerViewModel, TickerViewModel>();
         builder.Services.AddTransient<ITickerHistoryViewModel, TickerHistoryViewModel>();
         builder.Services.AddTransient<IOrderViewModel, OrderViewModel>();
         builder.Services.AddTransient<IHealthcheckViewModel, HealthcheckViewModel>();
+        builder.Services.AddTransient<IImageViewModel, ImageViewModel>();
 
         builder.Configuration.AddUserSecrets<MongoSettings>();
         builder.Configuration.AddUserSecrets<AppSettings>();
