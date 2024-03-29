@@ -55,7 +55,7 @@ namespace WGMansion.Api.Controllers
         }
 
         [Authorize(Roles = Roles.Admin)]
-        [HttpPost]
+        [HttpDelete]
         [Route("/deleteimage")]
         public async Task<ActionResult<string>> DeleteImage(string id)
         {
