@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'Bombardier';
+    src: url('/fonts/Bombardier.woff2') format('woff2'),
+         url('/fonts/Bombardier.woff') format('woff'),
+         url('/fonts/Bombardier.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }

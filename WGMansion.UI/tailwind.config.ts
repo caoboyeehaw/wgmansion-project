@@ -7,7 +7,7 @@ const config = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -18,6 +18,16 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Proxima Nova','Alphavest Font', 'Arial', 'Tahoma', 'PingFangSC', 'sans-serif'],
+        bombardier: ['Bombardier', 'sans-serif'],
+      },
+      fontSize: {
+        base: '16px',
+      },
+      lineHeight: {
+        6: '24px',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
