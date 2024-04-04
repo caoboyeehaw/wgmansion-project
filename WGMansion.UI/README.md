@@ -14,23 +14,28 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+https://www.radix-ui.com/icons
+https://ui.shadcn.com/
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+current ui dashboard modeled after: 
+https://github.com/shadcn-ui/ui/blob/main/apps/www/app/(app)/examples/dashboard/components/user-nav.tsx
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+landing page will look like: 
+https://openai.com/blog/superalignment-fast-grants
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+frontend dependencies notes:
+- shadcn
+- tailwindcss
+- recharts
+- radix ui
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+conisderations:
+- might consider aceternity ui for some fancy fx, and radix icons for more use of icons.
+- future plans include designing custom modals using shadcn component ~ component art i guess??
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+color codes will include blue for stocks, and green for options
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+need to fix that stupid error where the sidebar moves
