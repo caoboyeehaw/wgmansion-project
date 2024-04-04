@@ -8,13 +8,13 @@ namespace WGMansion.Api.Models.Ticker
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string? Id { get; set; }
         [BsonElement("type")]
         public string Type { get; set; } = "ticker";
         [BsonElement("active")]
         public bool Active { get; set; } = true;
         [BsonElement("symbol")]
-        public string Symbol { get; set; }
+        public string? Symbol { get; set; }
         [BsonElement("buyOrders")]
         public List<Order> BuyOrders { get; set; } = new List<Order>();
         [BsonElement("sellOrders")]

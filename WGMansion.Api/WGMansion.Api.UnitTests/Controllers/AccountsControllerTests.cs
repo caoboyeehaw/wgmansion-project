@@ -26,9 +26,13 @@ namespace WGMansion.Api.UnitTests.Controllers
         [Test]
         public async Task TestAuthenticate()
         {
-            var account = new Account();
+            var account = new Account
+            {
+                UserName = "username",
+                Password = "password",
+            };
             _accountsViewModel.Setup(x => x.Authenticate("username", "password")).ReturnsAsync(account);
-            var result = await _sut.Authenticate("username", "password");
+            var result = await _sut.Authenticate(account);
             var okResult = result.Result as OkObjectResult;
 
             Assert.That(result, Is.Not.Null);
@@ -38,9 +42,13 @@ namespace WGMansion.Api.UnitTests.Controllers
         [Test]
         public async Task TestAuthenticateBadResult()
         {
-            var account = new Account();
+            var account = new Account
+            {
+                UserName = "username",
+                Password = "password",
+            };
             _accountsViewModel.Setup(x => x.Authenticate("username", "password")).ThrowsAsync(new Exception());
-            var result = await _sut.Authenticate("username", "password");
+            var result = await _sut.Authenticate(account);
             var badResult = result.Result as BadRequestObjectResult;
 
             Assert.That(result, Is.Not.Null);
@@ -50,9 +58,14 @@ namespace WGMansion.Api.UnitTests.Controllers
         [Test]
         public async Task TestCreateUser()
         {
-            var account = new Account();
+            var account = new Account
+            {
+                UserName = "username",
+                Password = "password",
+                Email = "email"
+            };
             _accountsViewModel.Setup(x => x.CreateAccount("username", "password", "email")).ReturnsAsync(account);
-            var result = await _sut.CreateUser("username", "password", "email");
+            var result = await _sut.CreateUser(account);
             var okResult = result.Result as OkObjectResult;
 
             Assert.That(result, Is.Not.Null);
@@ -62,9 +75,14 @@ namespace WGMansion.Api.UnitTests.Controllers
         [Test]
         public async Task TestCreateUserBadResult()
         {
-            var account = new Account();
+            var account = new Account
+            {
+                UserName = "username",
+                Password = "password",
+                Email = "email"
+            };
             _accountsViewModel.Setup(x => x.CreateAccount("username", "password", "email")).ThrowsAsync(new Exception());
-            var result = await _sut.CreateUser("username", "password", "email");
+            var result = await _sut.CreateUser(account);
             var badResult = result.Result as BadRequestObjectResult;
 
             Assert.That(result, Is.Not.Null);

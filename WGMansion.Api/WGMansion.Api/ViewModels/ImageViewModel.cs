@@ -17,8 +17,8 @@ namespace WGMansion.Api.ViewModels
         private readonly IGridFSService _gridFSService;
         private readonly string[] ALLOWED_EXTENSIONS = [".png", ".jpeg"];
 
-        public ImageViewModel(IGridFSService gridFSService) 
-        { 
+        public ImageViewModel(IGridFSService gridFSService)
+        {
             _gridFSService = gridFSService;
         }
 

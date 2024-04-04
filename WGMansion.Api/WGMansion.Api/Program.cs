@@ -27,11 +27,6 @@ internal class Program
 
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllersWithViews()
-            .AddNewtonsoftJson(options =>
-            options.SerializerSettings.Converters.Add(new StringEnumConverter()));
-        builder.Services.AddSwaggerGenNewtonsoftSupport();
-
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
@@ -106,10 +101,12 @@ internal class Program
         app.UseSwaggerUI();
 
         app.UseHttpsRedirection();
+
         app.UseCors(x => x
         .AllowAnyHeader()
-        .SetIsOriginAllowed(origin => true)
-        .AllowCredentials());
+        .AllowAnyOrigin()
+        .AllowAnyHeader());
+
         app.UseAuthentication();
         app.UseAuthorization();
 
