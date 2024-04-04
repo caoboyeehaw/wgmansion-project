@@ -23,7 +23,7 @@ export function Search() {
           <Image src="/search.svg" alt="Search Icon" width={20} height={20} />
         </div>
         
-        <div className="ml-4 flex items-center">
+        <div className="ml-2 flex items-center">
           <div
             className="px-2.5 py-1.5 rounded-xl hover:bg-zinc-100 cursor-pointer"
             onClick={handleFilterClick}
@@ -42,9 +42,6 @@ export function Search() {
           </div>
           <div className="px-2.5 py-1.5 rounded-xl hover:bg-zinc-100 ml-2">
             <Image src="/sortvolume.svg" alt="Sort Volume" width={20} height={20} />
-          </div>
-          <div className="px-2.5 py-1.5 rounded-xl hover:bg-zinc-100 ml-2">
-            <Image src="/filter6.svg" alt="Filter Icon 4" width={20} height={20} />
           </div>
         </div>
       )}

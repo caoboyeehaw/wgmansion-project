@@ -103,16 +103,17 @@ export default function Home() {
       <div className="hidden flex-col md:flex overflow-visible">
         <div className="flex h-16 items-center px-6 w-full top-0 bg-white/80 backdrop-blur-lg z-50 fixed">
           <div className="sidebar fixed left-0 top-0 bottom-0 w-64 bg-white p-4">
-            <div className="flex items-center space-x-2 pl-3 mt-1">
+            <div className="flex items-center space-x-2 pl-1 mt-1">
               {/*<Image src="/concrete.jpg" width={32} height={32} alt="Logo" className="rounded-xl" />*/}
               
               <div className="flex items-center">
-                <div className="mr-2 text-zinc-800 text-2xl font-black font-bombardier italic antialiased">Fund</div>
-                  <div className="mr-1 text-zinc-800 text-xl font-bold px-2 py-0.5 bg-pink-200 rounded-lg">Hub</div>
+                <div className="mr-2 text-zinc-800 text-3xl font-black font-bombardier italic antialiased">LLM</div>
+                  <div className="mr-1 text-zinc-800 text-2xl font-bold px-2 py-0.5 bg-pink-200 rounded-lg">Trader</div>
                   <div className="text-zinc-800 text-sm font-bold">
-                <sup>.AI</sup>   
+                  <sup className="">.AI</sup>
                 </div>
-                <div className="text-xs font-medium">/Dashboard</div>
+                <div className="text-md font-medium">/</div>
+                <div className="text-sm font-medium">Dashboard</div>
               </div>
             </div>
             <div className="mt-3 mb-2"></div>
@@ -123,8 +124,8 @@ export default function Home() {
             >
               <Image
                 src="dashboard.svg"
-                width={36}
-                height={36}
+                width={32}
+                height={32}
                 alt="dashboard"
                 className="pr-2"
               />
@@ -137,8 +138,8 @@ export default function Home() {
             >
               <Image
                 src="positions.svg"
-                width={36}
-                height={36}
+                width={32}
+                height={32}
                 alt="positions"
                 className="pr-2"
               />
@@ -151,8 +152,8 @@ export default function Home() {
             >
               <Image
                 src="configure.svg"
-                width={36}
-                height={36}
+                width={32}
+                height={32}
                 alt="configure"
                 className="pr-2"
               />
@@ -165,12 +166,12 @@ export default function Home() {
             >
               <Image
                 src="taxfees.svg"
-                width={36}
-                height={36}
-                alt="taxfees"
+                width={32}
+                height={32}
+                alt="taxfees and slippage"
                 className="pr-2"
               />
-              <span>Tax/Fees</span>
+              <span>Expenses</span>
             </ButtonStart>
 
             <ButtonStart 
@@ -179,8 +180,8 @@ export default function Home() {
             >
               <Image
                 src="trending.svg"
-                width={36}
-                height={36}
+                width={32}
+                height={32}
                 alt="trending"
                 className="pr-2"
               />
@@ -193,8 +194,8 @@ export default function Home() {
             >
               <Image
                 src="scanner.svg"
-                width={36}
-                height={36}
+                width={32}
+                height={32}
                 alt="scanner"
                 className="pr-2"
               />
@@ -207,11 +208,11 @@ export default function Home() {
             >
               <Image
                 src="terminal.svg"
-                width={36}
-                height={36}
+                width={32}
+                height={32}
                 alt="trending"
                 className="pr-2"
-              />
+              />  
               <span>Terminal</span>
             </ButtonStart>
             
@@ -221,8 +222,8 @@ export default function Home() {
             >
               <Image
                 src="tutorial.svg"
-                width={36}
-                height={36}
+                width={32}
+                height={32}
                 alt="tutorial"
                 className="pr-2"
               />
@@ -235,8 +236,8 @@ export default function Home() {
             >
               <Image
                 src="document.svg"
-                width={36}
-                height={36}
+                width={32}
+                height={32}
                 alt="document"
                 className="pr-2"
               />
@@ -248,8 +249,8 @@ export default function Home() {
             >
               <Image
                 src="challenge.svg"
-                width={36}
-                height={36}
+                width={32}
+                height={32}
                 alt="challenge"
                 className="pr-2"
               />
@@ -261,8 +262,8 @@ export default function Home() {
             >
               <Image
                 src="experiment.svg"
-                width={36}
-                height={36}
+                width={32}
+                height={32}
                 alt="backtest"
                 className="pr-2"
               />
@@ -309,7 +310,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="ml-64 p-8 pt-16">
+        <div className="ml-64 pt-16 pr-6">
           {/*<h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>*/}
 
           <Tabs defaultValue="overview">
@@ -321,14 +322,23 @@ export default function Home() {
                 <TabsTrigger value="analytics">
                   Analytics
                 </TabsTrigger>
-                <TabsTrigger value="reports">
+                <TabsTrigger value="orders">
+                  Orders
+                </TabsTrigger>
+                <TabsTrigger value="notifications" disabled>
                   Reports
                 </TabsTrigger>
                 <TabsTrigger value="notifications" disabled>
-                  Notifications
+                  Positions
+                </TabsTrigger>
+                <TabsTrigger value="notifications" disabled>
+                  Highlights
+                </TabsTrigger>
+                <TabsTrigger value="notifications" disabled>
+                  Statistics
                 </TabsTrigger>
               </TabsList>
-              <div className="mb-4 ">
+              <div className="">
                 <div className="flex items-center space-x-2">
                   <CalendarDateRangePicker />
                   <Button>Download</Button>
@@ -552,15 +562,9 @@ export default function Home() {
                 </Card>
               </div>
             </TabsContent>
-            <TabsContent value="reports" className="space-y-4">
+            <TabsContent value="orders" className="space-y-4">
                 <Card>
-                  <CardHeader className="px-7">
-                    <CardTitle>Orders</CardTitle>
-                    <CardDescription>
-                      Recent orders from your store.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
+                  <CardContent className="mt-5">
                     <Table>
                       <TableHeader>
                         <TableRow>

@@ -19,6 +19,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Switch } from "@/components/ui/switch"
 import Image from "next/image";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 
@@ -28,71 +29,76 @@ export function UserNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+            
             <Avatar className="h-10 w-10">
               <AvatarImage src="/avatars/01.png" alt="@shadcn" />
               <AvatarFallback>DC</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-60 p-2" align="end" forceMount>
-          <DropdownMenuLabel className="font-normal">
-            <div className="flex items-center space-x-2">
-              <div>
-                <p className="text-2xl font-medium leading-none">Dylan Cao</p>
-                <p className="text-base mt-1 leading-none text-muted-foreground">
-                  user@example.com
-                </p>
-
-                <p className="text-xs leading-none text-muted-foreground mt-1 hover:underline">
-                  <Link href="/profile" className="text-blue-700">
-                    View your profile page
-                  </Link>
-                </p>
-              </div>
-            </div>
+        <DropdownMenuContent className="w-50 p-2 rounded-xl" align="end" forceMount>
+  <div className="flex items-center">
+    <Avatar className="h-10 w-10">
+      <AvatarImage src="/avatars/01.png" alt="@shadcn" />
+      <AvatarFallback>DC</AvatarFallback>
+    </Avatar>
+    <div className="ml-2">
+      <div className="flex items-center text-xs font-medium">
+        <Image
+          src="/verified.svg"
+          width={14}
+          height={14}
+          alt="verified"
+          className="rounded-xl mr-1"
+        />
+        {/*Business*/}
+        {/*Premium*/}
+        {/*Regular*/}
+        Regular Member
+      </div>
+      <div className="flex items-center mt-1 hover:underline">
+        <Image
+          src="/person.svg"
+          width={14}
+          height={14}
+          alt="verified"
+          className="mr-1"
+        />
+        <p className="text-xs leading-none text-muted-foreground">
+          <Link href="/profile" className="text-blue-700">
+            View your profile
+          </Link>
+        </p>
+      </div>
+    </div>
+  </div>
+  <DropdownMenuLabel className="font-normal mt-2">
+    <div className="flex items-center space-x-2">
+      <div>
+        <p className="text-2xl font-medium leading-none">Dylan Cao</p>
+        <p className="text-base mt-1 leading-none text-muted-foreground overflow-hidden text-ellipsis whitespace-nowrap">
+          @aliasName
+        </p>
+      </div>
+    </div>
           </DropdownMenuLabel>
+                
+          <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>
               <div className="flex items-center text-base font-medium">
                 <Image
-                  src="/account.svg"
+                  src="/manageaccount.svg"
                   width={20}
                   height={20}
                   alt="logoutLogo"
                   className="rounded-xl mr-2 font-sans"
                 />
-                Account
-              </div>
-              <DropdownMenuShortcut></DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <div className="flex items-center text-base font-medium">
-                <Image
-                  src="/verified.svg"
-                  width={20}
-                  height={20}
-                  alt="logoutLogo"
-                  className="rounded-xl mr-2"
-                />
-                Premium
-              </div>
-              <DropdownMenuShortcut></DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-            <div className="flex items-center text-base font-medium">
-                <Image
-                  src="/logout.svg"
-                  width={20}
-                  height={20}
-                  alt="logoutLogo"
-                  className="rounded-xl mr-2 "
-                />
-                Themes
+                Account Settings
               </div>
               <DropdownMenuShortcut></DropdownMenuShortcut>
             </DropdownMenuItem>
           </DropdownMenuGroup>
-          <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>
               <div className="flex items-center text-base font-medium">
@@ -103,7 +109,7 @@ export function UserNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
                   alt="SettingsLogo"  
                   className="rounded-xl mr-2"
                 />
-                Settings
+                General Settings
               </div>
               <DropdownMenuShortcut></DropdownMenuShortcut>
             </DropdownMenuItem>
@@ -116,7 +122,21 @@ export function UserNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
                   alt="SettingsLogo"
                   className="rounded-xl mr-2"
                 />
-                API Keys
+                API Access Keys
+              </div>
+              <DropdownMenuShortcut></DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+            <div className="flex items-center text-base font-medium">
+                <Image
+                  src="/lightmode.svg"
+                  width={20}
+                  height={20}
+                  alt="themeLogo"
+                  className="rounded-xl mr-2 "
+                />
+                Light Mode 
+                <Switch className="ml-1"></Switch>
               </div>
               <DropdownMenuShortcut></DropdownMenuShortcut>
             </DropdownMenuItem>
@@ -130,7 +150,7 @@ export function UserNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
                   alt="logoutLogo"
                   className="rounded-xl mr-2 "
                 />
-                Sign out
+                Sign out 
               </div>
               <DropdownMenuShortcut></DropdownMenuShortcut>
             </DropdownMenuItem>
