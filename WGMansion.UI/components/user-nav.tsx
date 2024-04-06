@@ -1,9 +1,10 @@
+"use client"
+
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-
 
 import Link from "next/link";
 
@@ -37,50 +38,50 @@ export function UserNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-50 p-2 rounded-xl" align="end" forceMount>
-  <div className="flex items-center">
-    <Avatar className="h-10 w-10">
-      <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-      <AvatarFallback>DC</AvatarFallback>
-    </Avatar>
-    <div className="ml-2">
-      <div className="flex items-center text-xs font-medium">
-        <Image
-          src="/verified.svg"
-          width={14}
-          height={14}
-          alt="verified"
-          className="rounded-xl mr-1"
-        />
-        {/*Business*/}
-        {/*Premium*/}
-        {/*Regular*/}
-        Regular Member
-      </div>
-      <div className="flex items-center mt-1 hover:underline">
-        <Image
-          src="/person.svg"
-          width={14}
-          height={14}
-          alt="verified"
-          className="mr-1"
-        />
-        <p className="text-xs leading-none text-muted-foreground">
-          <Link href="/profile" className="text-blue-700">
-            View your profile
-          </Link>
-        </p>
-      </div>
-    </div>
-  </div>
-  <DropdownMenuLabel className="font-normal mt-2">
-    <div className="flex items-center space-x-2">
-      <div>
-        <p className="text-2xl font-medium leading-none">Dylan Cao</p>
-        <p className="text-base mt-1 leading-none text-muted-foreground overflow-hidden text-ellipsis whitespace-nowrap">
-          @aliasName
-        </p>
-      </div>
-    </div>
+          <div className="flex items-center">
+            <Avatar className="h-10 w-10">
+              <AvatarImage src="/avatars/01.png" alt="@shadcn" />
+              <AvatarFallback>DC</AvatarFallback>
+            </Avatar>
+            <div className="ml-2">
+              <div className="flex items-center text-xs font-medium">
+                <Image
+                  src="/verified.svg"
+                  width={14}
+                  height={14}
+                  alt="verified"
+                  className="rounded-xl mr-1"
+                />
+                {/*Business*/}
+                {/*Premium*/}
+                {/*Regular*/}
+                Regular Member
+              </div>
+              <div className="flex items-center mt-1 hover:underline">
+                <Image
+                  src="/person.svg"
+                  width={14}
+                  height={14}
+                  alt="verified"
+                  className="mr-1"
+                />
+                <p className="text-xs leading-none text-muted-foreground">
+                  <Link href="/profile" className="text-blue-700">
+                    View your profile
+                  </Link>
+                </p>
+              </div>
+            </div>
+          </div>
+          <DropdownMenuLabel className="font-normal mt-2">
+            <div className="flex items-center space-x-2">
+              <div>
+                <p className="text-2xl font-medium leading-none">Dylan Cao</p>
+                <p className="text-base mt-1 leading-none text-muted-foreground overflow-hidden text-ellipsis whitespace-nowrap">
+                  @aliasName
+                </p>
+              </div>
+            </div>
           </DropdownMenuLabel>
                 
           <DropdownMenuSeparator />
@@ -89,8 +90,8 @@ export function UserNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
               <div className="flex items-center text-base font-medium">
                 <Image
                   src="/manageaccount.svg"
-                  width={20}
-                  height={20}
+                  width={18}
+                  height={18}
                   alt="logoutLogo"
                   className="rounded-xl mr-2 font-sans"
                 />
@@ -104,8 +105,8 @@ export function UserNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
               <div className="flex items-center text-base font-medium">
                 <Image
                   src="/settings.svg"
-                  width={20}
-                  height={20}
+                  width={18}
+                  height={18}
                   alt="SettingsLogo"  
                   className="rounded-xl mr-2"
                 />
@@ -117,8 +118,8 @@ export function UserNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
               <div className="flex items-center text-base font-medium">
                 <Image
                   src="/key.svg"
-                  width={20}
-                  height={20}
+                  width={18}
+                  height={18}
                   alt="SettingsLogo"
                   className="rounded-xl mr-2"
                 />
@@ -127,16 +128,16 @@ export function UserNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
               <DropdownMenuShortcut></DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem>
-            <div className="flex items-center text-base font-medium">
+              <div className="flex items-center text-base font-medium">
                 <Image
                   src="/lightmode.svg"
-                  width={20}
-                  height={20}
+                  width={18}
+                  height={18}
                   alt="themeLogo"
                   className="rounded-xl mr-2 "
                 />
                 Light Mode 
-                <Switch className="ml-1"></Switch>
+                <Switch className="ml-1" />
               </div>
               <DropdownMenuShortcut></DropdownMenuShortcut>
             </DropdownMenuItem>

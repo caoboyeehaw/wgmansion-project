@@ -101,9 +101,9 @@ export default function Home() {
   return (
     <>
       <div className="hidden flex-col md:flex overflow-visible">
-        <div className="flex h-16 items-center px-6 w-full top-0 bg-white/80 backdrop-blur-lg z-50 fixed">
-          <div className="sidebar fixed left-0 top-0 bottom-0 w-64 bg-white p-4">
-            <div className="flex items-center space-x-2 pl-1 mt-1">
+        <div className="flex h-14 items-center px-6 w-full top-0 bg-white/80 backdrop-blur-lg z-50 fixed">
+          <div className="sidebar fixed left-0 top-0 bottom-0 w-64 bg-white p-2">
+            <div className="flex items-center space-x-2 pl-2">
               {/*<Image src="/concrete.jpg" width={32} height={32} alt="Logo" className="rounded-xl" />*/}
               
               <div className="flex items-center">
@@ -124,8 +124,8 @@ export default function Home() {
             >
               <Image
                 src="dashboard.svg"
-                width={32}
-                height={32}
+                width={30}
+                height={30}
                 alt="dashboard"
                 className="pr-2"
               />
@@ -138,8 +138,8 @@ export default function Home() {
             >
               <Image
                 src="positions.svg"
-                width={32}
-                height={32}
+                width={30}
+                height={30}
                 alt="positions"
                 className="pr-2"
               />
@@ -152,8 +152,8 @@ export default function Home() {
             >
               <Image
                 src="configure.svg"
-                width={32}
-                height={32}
+                width={30}
+                height={30}
                 alt="configure"
                 className="pr-2"
               />
@@ -166,8 +166,8 @@ export default function Home() {
             >
               <Image
                 src="taxfees.svg"
-                width={32}
-                height={32}
+                width={30}
+                height={30}
                 alt="taxfees and slippage"
                 className="pr-2"
               />
@@ -180,8 +180,8 @@ export default function Home() {
             >
               <Image
                 src="trending.svg"
-                width={32}
-                height={32}
+                width={30}
+                height={30}
                 alt="trending"
                 className="pr-2"
               />
@@ -194,8 +194,8 @@ export default function Home() {
             >
               <Image
                 src="scanner.svg"
-                width={32}
-                height={32}
+                width={30}
+                height={30}
                 alt="scanner"
                 className="pr-2"
               />
@@ -208,8 +208,8 @@ export default function Home() {
             >
               <Image
                 src="terminal.svg"
-                width={32}
-                height={32}
+                width={30}
+                height={30}
                 alt="trending"
                 className="pr-2"
               />  
@@ -222,8 +222,8 @@ export default function Home() {
             >
               <Image
                 src="tutorial.svg"
-                width={32}
-                height={32}
+                width={30}
+                height={30}
                 alt="tutorial"
                 className="pr-2"
               />
@@ -236,8 +236,8 @@ export default function Home() {
             >
               <Image
                 src="document.svg"
-                width={32}
-                height={32}
+                width={30}
+                height={30}
                 alt="document"
                 className="pr-2"
               />
@@ -249,8 +249,8 @@ export default function Home() {
             >
               <Image
                 src="challenge.svg"
-                width={32}
-                height={32}
+                width={30}
+                height={30}
                 alt="challenge"
                 className="pr-2"
               />
@@ -262,14 +262,14 @@ export default function Home() {
             >
               <Image
                 src="experiment.svg"
-                width={32}
-                height={32}
+                width={30}
+                height={30}
                 alt="backtest"
                 className="pr-2"
               />
               <span>Backtest</span>
             </ButtonStart>
-            <div className="px-1 mt-auto">
+            <div className="px-3 mt-auto">
               <div className="mt-3 mb-4 border-t border-gray-200"></div>
               <a className="text-zinc-400 text-base font-semibold">testing</a>
               <div className="mt-3 mb-4 border-t border-gray-200"></div>
@@ -310,7 +310,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="ml-64 pt-16 pr-6">
+        <div className="ml-64 pt-14 pr-6">
           {/*<h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>*/}
 
           <Tabs defaultValue="overview">
