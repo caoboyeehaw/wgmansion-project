@@ -39,3 +39,6 @@ color codes will include blue for stocks, and green for options
 
 
 need to fix that stupid error where the sidebar moves
+
+
+need to apply click zones to the buttons because they arent working.

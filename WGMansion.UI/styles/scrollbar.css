@@ -1,7 +1,7 @@
 /* For WebKit browsers (Chrome, Safari) */
 ::-webkit-scrollbar {
-    width: 8px; /* Width of the scrollbar */
-    height: 8px; /* Height of the horizontal scrollbar */
+    width: 4px; /* Width of the scrollbar */
+    height: 4px; /* Height of the horizontal scrollbar */
   }
   
   ::-webkit-scrollbar-track {
